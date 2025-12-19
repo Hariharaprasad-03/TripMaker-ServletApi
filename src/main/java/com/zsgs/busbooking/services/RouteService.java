@@ -33,5 +33,11 @@ public class RouteService {
         return null;
     }
 
+    public Route getRouteById(String routeId)throws SQLException{
+
+        return routeRepository.findRouteById(routeId);
+
+    }
+
 
 }

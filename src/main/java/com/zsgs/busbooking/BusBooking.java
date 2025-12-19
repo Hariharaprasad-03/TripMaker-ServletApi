@@ -8,6 +8,7 @@ import com.zsgs.busbooking.services.PassengerService;
 
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.time.LocalDate;
 
 public class BusBooking {
 
@@ -17,6 +18,7 @@ public class BusBooking {
             PassengerService passengerService = new PassengerService( new PassengerRepository());
             BusService busService = new BusService(new BusRepository());
 
+            System.out.println(LocalDate.now());
 
             PassengerSignUpRequest p1 = new PassengerSignUpRequest();
             p1.setEmail("test@gmail.com");
@@ -33,6 +35,7 @@ public class BusBooking {
             p2.setMobileNumber("9323232323");
 
             passengerService.addPassenger(p2);
+
 
 
         } catch (SQLIntegrityConstraintViolationException e) {

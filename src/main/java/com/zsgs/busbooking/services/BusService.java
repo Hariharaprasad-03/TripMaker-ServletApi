@@ -14,16 +14,16 @@ import java.sql.SQLException;
 public class BusService {
 
 
-    private final BusRepository repository;
+    private final BusRepository busRepository;
     private  long id = 1;
 
     public BusService (BusRepository repository){
-        this.repository = repository;
+        this.busRepository = repository;
     }
 
     public Bus addBus(AddBusRequest request)throws SQLException {
 
-        Bus exist = repository.findBusByNumber(request.getBusNumber());
+        Bus exist = busRepository.findBusByNumber(request.getBusNumber());
 
         if (exist != null){
 
@@ -38,7 +38,7 @@ public class BusService {
         newBus.setBusName(request.getBusName());
         newBus.setBusType(BusType.valueOf(request.getBusType()));
 
-        if(repository.addBus(newBus) ) {
+        if(busRepository.addBus(newBus) ) {
             return newBus;
         }
 
@@ -46,7 +46,12 @@ public class BusService {
     }
 
     public Bus getBusById(String id) throws SQLException{
-        return repository.findBusById(id);
+        return busRepository.findBusById(id);
+    }
+
+    public BusStatus getBusStatusById(String busId) throws SQLException {
+
+        return busRepository.getBusStatus(busId);
     }
 
 

@@ -1,6 +1,8 @@
 package com.zsgs.busbooking.repositories;
 
+import com.zsgs.busbooking.config.BeanFactory;
 import com.zsgs.busbooking.model.Route;
+import com.zsgs.busbooking.model.Trip;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -43,5 +45,32 @@ public class RouteRepository extends BaseRepository{
             }
         }
         return null;
+    }
+
+    public Route findRouteById(String id ) throws SQLException{
+
+        String sql = "SELECT * FROM route WHERE route_id = (?)";
+
+        try(Connection connection = getConnection();
+            PreparedStatement pstmt = connection.prepareStatement(sql)
+        ){
+
+            Route route = BeanFactory.getInstance().createRoute();
+
+            pstmt.setString(1,id);
+
+            try( ResultSet rs = pstmt.executeQuery()){
+
+                route.setRouteId(rs.getString("route_id"));
+                route.setSource(rs.getString("source"));
+                route.setDestination(rs.getString("destination"));
+                route.setDistanceKm(rs.getInt("distance_km"));
+
+                return route;
+            }
+
+
+        }
+
     }
 }

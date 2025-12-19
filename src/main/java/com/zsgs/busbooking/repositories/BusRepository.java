@@ -92,6 +92,31 @@ public class BusRepository extends BaseRepository{
         }
     }
 
+    public BusStatus getBusStatus( String busId) throws SQLException {
+
+        String sql = "SELECT status FROM bus WHERE bus_id = (?)";
+        BusStatus status =null;
+
+        try( Connection connection = getConnection() ;
+        PreparedStatement pstmt = connection.prepareStatement(sql)){
+
+            pstmt.setString(1,busId);
+
+            try(ResultSet rs = pstmt.executeQuery()){
+
+                if ( rs.next()) {
+                    status =BusStatus.valueOf(rs.getString("status"));
+                }
+            }
+
+            return status;
+
+        }
+
+
+
+    }
+
 
 
 }

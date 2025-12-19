@@ -1,9 +1,15 @@
 package com.zsgs.busbooking.repositories;
 
+import com.zsgs.busbooking.config.BeanFactory;
 import com.zsgs.busbooking.enums.TripStatus;
 import com.zsgs.busbooking.model.Trip;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 public class TripRepository  extends BaseRepository{
 
@@ -62,6 +68,40 @@ public class TripRepository  extends BaseRepository{
 
         }
     }
+
+    public List<Trip> getBusTripsByDate(String busId , LocalDate date) throws SQLException {
+
+        List<Trip> trips = new ArrayList<>();
+
+        String sql = "SELECT * FROM trip WHERE date =(?) AND bus_id = (?)";
+
+        try( Connection connection = getConnection();
+        PreparedStatement pstmt = connection.prepareStatement(sql)){
+
+            pstmt.setDate(1, Date.valueOf(date));
+            pstmt.setString(2,busId);
+
+            try(ResultSet rs = pstmt.executeQuery()){
+
+                while( rs.next()) {
+
+                    Trip trip = BeanFactory.getInstance().createTrip();
+                    trip.setBusId(rs.getString("bus_id"));
+                    trip.setTripId(rs.getString("trip_id"));
+                    trip.setStartTime(rs.getTime("start_time").toLocalTime());
+                    trip.setEndTime(rs.getTime("end_time").toLocalTime());
+                    trip.setTripDate(rs.getDate("date").toLocalDate());
+
+                    trips.add(trip);
+                }
+
+            }
+            return trips;
+        }
+
+
+    }
+
 
 
 
