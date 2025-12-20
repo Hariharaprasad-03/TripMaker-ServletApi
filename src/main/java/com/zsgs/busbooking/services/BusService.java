@@ -54,5 +54,16 @@ public class BusService {
         return busRepository.getBusStatus(busId);
     }
 
+    public Bus getBusByNumber(String busNumber) throws SQLException{
+
+        return busRepository.findBusByNumber(busNumber);
+
+    }
+
+    public boolean setBusStatus(BusStatus status ){
+
+        return true;
+    }
+
 
 }

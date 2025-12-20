@@ -33,7 +33,8 @@ public class TripService {
     public Trip createTrip(CreateTripRequest request)throws SQLException {
 
             if (    request.busId().isEmpty() ||
-                    request.routeId().isEmpty() ||
+                    request.source().isEmpty() ||
+                    request.destination().isEmpty() ||
                     request.tripDate()== null ||
                     request.startTime() == null ||
                     request.endTime() == null
@@ -42,17 +43,13 @@ public class TripService {
                 throw  new InvalidCreadiantialsExcaption(" Bad Request");
             }
 
-            Route route = routeService.getRouteById(request.routeId());
 
-            if ( route == null){
-
-                throw new InvalidRequest("Route not Exist");
-            }
-
-            if ( ! validateBus(request.busId(),request.tripDate(),request.startTime(),request.endTime())){
+            if ( ! validateBus(request.busId() , request.busNumber(),request.tripDate(),request.startTime(),request.endTime())){
 
                 throw new InvalidRequest("Check the Bus Crediantials");
             }
+
+            String routeId = validateRoute(request.source(), request.destination());
 
             Trip trip = BeanFactory.getInstance().createTrip();
             trip.setTripId(new IdGenerator().genarateId("TRIP",id++));
@@ -61,6 +58,7 @@ public class TripService {
             trip.setEndTime(request.endTime());
             trip.setBusId(request.busId());
             trip.setStaus(TripStatus.ACTIVE);
+            trip.setRouteId(routeId);
 
             if (tripRepository.createTrip(trip)) {
 
@@ -73,9 +71,10 @@ public class TripService {
 
     }
 
-    public boolean validateBus(String busId , LocalDate date , LocalTime start ,LocalTime end)throws SQLException{
+    public boolean validateBus(String busId ,String busNumber ,LocalDate date , LocalTime start ,LocalTime end)throws SQLException{
 
-        Bus bus = busService.getBusById(busId);
+        Bus bus = busService.getBusByNumber(busNumber);
+
 
         if (bus == null || bus.getBusStatus()!= BusStatus.FREE){
             throw new InvalidRequest(" verify the Bus Creadiantials");
@@ -93,6 +92,19 @@ public class TripService {
 
         }
         return true ;
+
+    }
+
+    public String  validateRoute(String source , String destination) throws SQLException{
+
+        String  routeId  = routeService.getRouteIdBySourceAndDestination(source, destination);
+
+        if ( routeId == null ){
+
+            throw  new InvalidRequest(" Service Not Availale for the this Route ");
+
+        }
+        return routeId;
 
     }
 

@@ -44,6 +44,10 @@ public class BusRepository extends BaseRepository{
 
             ResultSet rs = pstmt.executeQuery();
 
+            if (! rs.next()){
+                return null;
+            }
+
             Bus bus = BeanFactory.getInstance().createBus();
             bus.setBusId(rs.getString("bus_id"));
             bus.setBusName(rs.getString("bus_name"));
@@ -55,28 +59,37 @@ public class BusRepository extends BaseRepository{
         }
     }
 
-    public  Bus findBusByNumber(String busNumber) throws SQLException{
+    public Bus findBusByNumber(String busNumber) throws SQLException {
 
-        String sql = "SELECT * FROM bus WHERE bus_number= (?)";
+        String sql = "SELECT * FROM bus WHERE bus_number = ?";
 
-        try(Connection connection = getConnection();
-        PreparedStatement pstmt = connection.prepareStatement(sql)){
+        try (Connection connection = getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(sql)) {
 
-            pstmt.setString(1,busNumber);
+            pstmt.setString(1, busNumber);
 
-            ResultSet rs = pstmt.executeQuery();
+            try (ResultSet rs = pstmt.executeQuery()) {
 
-            Bus bus = BeanFactory.getInstance().createBus();
-            bus.setBusId(rs.getString("bus_id"));
-            bus.setBusName(rs.getString("bus_name"));
-            bus.setBusType(BusType.valueOf(rs.getString("bus_type")));
-            bus.setBusRegistrationId(rs.getString("bus_registration_id"));
-            bus.setBusNumber(rs.getString("bus_number"));
-            bus.setBusStatus(BusStatus.valueOf(rs.getString("status")));
+                if (!rs.next()) {
 
-            return bus ;
+                    return null;
+
+                }
+
+                Bus bus = BeanFactory.getInstance().createBus();
+
+                bus.setBusId(rs.getString("bus_id"));
+                bus.setBusName(rs.getString("bus_name"));
+                bus.setBusType(BusType.valueOf(rs.getString("bus_type")));
+                bus.setBusRegistrationId(rs.getString("bus_registration_id"));
+                bus.setBusNumber(rs.getString("bus_number"));
+                bus.setBusStatus(BusStatus.valueOf(rs.getString("status")));
+
+                return bus;
+            }
         }
     }
+
 
     public boolean removeBusbyId(String id ) throws SQLException{
 

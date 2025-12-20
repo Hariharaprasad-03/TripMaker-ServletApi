@@ -1,5 +1,8 @@
 package com.zsgs.busbooking;
 
+import com.zsgs.busbooking.enums.BusType;
+import com.zsgs.busbooking.payloads.AddBusRequest;
+import com.zsgs.busbooking.payloads.CreateTripRequest;
 import com.zsgs.busbooking.payloads.PassengerSignUpRequest;
 import com.zsgs.busbooking.repositories.BusRepository;
 import com.zsgs.busbooking.repositories.PassengerRepository;
@@ -20,21 +23,31 @@ public class BusBooking {
 
             System.out.println(LocalDate.now());
 
+
+            AddBusRequest busRequest = new AddBusRequest();
+
+            busRequest.setBusNumber("TN23BR4843");
+            busRequest.setBusName("SKMS");
+            busRequest.setBusRegistrationId("12345678");
+            busRequest.setBusType(String.valueOf(BusType.NORMAL));
+
+            busService.addBus(busRequest);
+
             PassengerSignUpRequest p1 = new PassengerSignUpRequest();
-            p1.setEmail("test@gmail.com");
-            p1.setMobileNumber("9111111111");
-            p1.setPassword("a");
-            p1.setPassengerName("A");
+            p1.setEmail("san@gmail.com");
+            p1.setMobileNumber("9278111111");
+            p1.setPassword("abcd");
+            p1.setPassengerName("SANJAY");
 
             passengerService.addPassenger(p1);
 
-            PassengerSignUpRequest p2 = new PassengerSignUpRequest();
-            p2.setEmail("test2@gmail.com");
-            p2.setPassword("b");
-            p2.setPassengerName("B");
-            p2.setMobileNumber("9323232323");
 
-            passengerService.addPassenger(p2);
+
+
+
+
+
+
 
 
 

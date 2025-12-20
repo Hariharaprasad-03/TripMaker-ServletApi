@@ -7,7 +7,10 @@ import java.time.LocalTime;
 public record CreateTripRequest (
 
         String busId,
-        String routeId,
+        String busNumber,
+        String busName ,
+        String source,
+        String destination,
         LocalTime startTime,
         LocalTime endTime ,
         LocalDate tripDate

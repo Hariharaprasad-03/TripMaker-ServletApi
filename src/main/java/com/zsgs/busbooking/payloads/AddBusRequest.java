@@ -9,7 +9,7 @@ public class AddBusRequest {
     private String busRegistrationId ;
     private String busType;
     private String busNumber;
-    private BusStatus busStatus;
+
 
     public AddBusRequest() {
     }
@@ -46,11 +46,5 @@ public class AddBusRequest {
         this.busNumber = busNumber;
     }
 
-    public BusStatus getBusStatus() {
-        return busStatus;
-    }
 
-    public void setBusStatus(BusStatus busStatus) {
-        this.busStatus = busStatus;
-    }
 }

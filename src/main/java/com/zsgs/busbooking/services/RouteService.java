@@ -38,6 +38,10 @@ public class RouteService {
         return routeRepository.findRouteById(routeId);
 
     }
+    public String getRouteIdBySourceAndDestination( String source , String destionation) throws SQLException {
+
+        return  routeRepository.findRouteIdBySourceAndDestination(source,destionation);
+    }
 
 
 }
