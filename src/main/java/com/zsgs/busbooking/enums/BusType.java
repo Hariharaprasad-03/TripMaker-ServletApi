@@ -5,5 +5,6 @@ public enum BusType {
     AC,
     SLEEPER,
     AC_SLEEPER,
-    SEATER
+    AC_SEATER,
+    DELUXE
 }

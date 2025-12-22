@@ -3,12 +3,15 @@ package com.zsgs.busbooking.services;
 import com.zsgs.busbooking.config.BeanFactory;
 import com.zsgs.busbooking.enums.BusStatus;
 import com.zsgs.busbooking.enums.BusType;
+import com.zsgs.busbooking.enums.SeatType;
 import com.zsgs.busbooking.exception.DuplicateEntityException;
 import com.zsgs.busbooking.model.Bus;
+import com.zsgs.busbooking.model.Seat;
 import com.zsgs.busbooking.payloads.AddBusRequest;
 import com.zsgs.busbooking.repositories.BusRepository;
 import com.zsgs.busbooking.util.IdGenerator;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 
 public class BusService {
@@ -38,7 +41,9 @@ public class BusService {
         newBus.setBusName(request.getBusName());
         newBus.setBusType(BusType.valueOf(request.getBusType()));
 
+
         if(busRepository.addBus(newBus) ) {
+            renderSeats(newBus.getBusId());
             return newBus;
         }
 
@@ -60,9 +65,40 @@ public class BusService {
 
     }
 
-    public boolean setBusStatus(BusStatus status ){
+    public boolean setBusStatus( String bus_id ,BusStatus status )throws SQLException{
 
-        return true;
+        return busRepository.updateBusStatus(bus_id,status);
+    }
+
+    public void renderSeats(String busId)throws SQLException{
+
+        int seatNumber = 1;
+
+        for (int row = 1; row <= 9; row++) {
+
+            for (int col = 1; col <= 5; col++) {
+
+                Seat seat = new Seat();
+
+                    // or auto-gen if DB handles it
+                seat.setBusId(busId);
+                seat.setSeatNumber(seatNumber++);
+                seat.setRowNumber(row);
+                seat.setColNumber(col);
+
+
+                if (col == 1 || col == 4) {
+                    seat.setSeatType(SeatType.WINDOW);
+                } else {
+                    seat.setSeatType(SeatType.NORMAL);
+                }
+
+                busRepository.saveSeats(seat);
+
+
+            }
+        }
+
     }
 
 

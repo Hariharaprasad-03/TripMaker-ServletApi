@@ -7,7 +7,8 @@ public class Booking {
     private String busId;
     private double price;
     private String paymentId;
-    private String UserId;
+    private String passengerId;
+    private  int noOfSeats ;
 
     public Booking() {}
 
@@ -17,7 +18,8 @@ public class Booking {
         this.busId = builder.busId;
         this.price = builder.price;
         this.paymentId = builder.paymentId;
-        UserId = builder.userId;
+        passengerId = builder.userId;
+        this.noOfSeats = builder.noOfSeats;
     }
 
     public String getBookingId() {
@@ -60,12 +62,20 @@ public class Booking {
         this.paymentId = paymentId;
     }
 
-    public String getUserId() {
-        return UserId;
+    public int getNoOfSeats() {
+        return noOfSeats;
     }
 
-    public void setUserId(String userId) {
-        UserId = userId;
+    public void setNoOfSeats(int noOfSeats) {
+        this.noOfSeats = noOfSeats;
+    }
+
+    public String getPassengerId() {
+        return passengerId;
+    }
+
+    public void setPassengerId(String passengerId) {
+        this.passengerId = passengerId;
     }
 
     public static Builder builder(){
@@ -74,6 +84,7 @@ public class Booking {
 
     public static class Builder {
 
+        public int noOfSeats;
         private String bookingId = null;
         private String tripId = null;
         private String busId = null;
@@ -108,6 +119,11 @@ public class Booking {
         public Builder withPaymentId(String paymentId){
             this.paymentId = paymentId;
             return this;
+        }
+
+        public  Builder withNoOfSeats(int noOfSeats){
+            this.noOfSeats = noOfSeats;
+            return this ;
         }
         public Booking build(){
 

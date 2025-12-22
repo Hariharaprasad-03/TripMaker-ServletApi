@@ -6,7 +6,6 @@ import java.time.LocalTime;
 
 public record CreateTripRequest (
 
-        String busId,
         String busNumber,
         String busName ,
         String source,
@@ -15,5 +14,6 @@ public record CreateTripRequest (
         LocalTime endTime ,
         LocalDate tripDate
 ) implements Serializable {
+
 
 }

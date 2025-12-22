@@ -6,6 +6,8 @@ public class Payment {
     private String paymentType;
     private double amount;
     private String paymentStatus;
+    private String paymentAddress ;
+    private String passengerId ;
 
     public Payment() {}
 
@@ -46,5 +48,21 @@ public class Payment {
 
     public void setPaymentStatus(String paymentStatus) {
         this.paymentStatus = paymentStatus;
+    }
+
+    public String getPaymentAddress() {
+        return paymentAddress;
+    }
+
+    public void setPaymentAddress(String paymentAddress) {
+        this.paymentAddress = paymentAddress;
+    }
+
+    public String getPassengerId() {
+        return passengerId;
+    }
+
+    public void setPassengerId(String passengerId) {
+        this.passengerId = passengerId;
     }
 }

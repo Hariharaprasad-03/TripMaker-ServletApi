@@ -1,6 +1,7 @@
 package com.zsgs.busbooking.services;
 
 import com.zsgs.busbooking.exception.DuplicateEntityException;
+import com.zsgs.busbooking.exception.InvalidRequest;
 import com.zsgs.busbooking.model.Route;
 import com.zsgs.busbooking.repositories.RouteRepository;
 import com.zsgs.busbooking.util.IdGenerator;
@@ -17,6 +18,23 @@ public class RouteService {
     }
 
     public Route addRouteService ( Route route ) throws SQLException {
+
+
+        if ( route.getSource().isEmpty() ){
+
+            throw new InvalidRequest("Bad Request  souce cannot be Null");
+        }
+
+        if (route.getDestination().isEmpty()){
+            throw new InvalidRequest(" bad Request destionation cannot be Null");
+        }
+
+        if ( route.getDistanceKm()<40){
+
+        }
+
+        route.setSource(route.getSource().toLowerCase().trim());
+        route.setDestination(route.getDestination().toLowerCase().trim());
 
         String exist = routeRepository.findRouteIdBySourceAndDestination(route.getSource(),route.getDestination());
 

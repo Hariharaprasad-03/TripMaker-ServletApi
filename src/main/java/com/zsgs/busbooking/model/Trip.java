@@ -14,6 +14,7 @@ public class Trip {
     private LocalTime endTime;
     private TripStatus staus ;
     private LocalDate tripDate;
+    private double price ;
 
     public Trip() {}
 
@@ -80,5 +81,13 @@ public class Trip {
 
     public void setTripDate(LocalDate tripDate) {
         this.tripDate = tripDate;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }

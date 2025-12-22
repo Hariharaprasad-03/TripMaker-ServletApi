@@ -1,5 +1,6 @@
 package com.zsgs.busbooking.repositories;
 
+import com.zsgs.busbooking.config.BeanFactory;
 import com.zsgs.busbooking.model.Passenger;
 
 import java.sql.*;
@@ -112,6 +113,37 @@ public class PassengerRepository extends BaseRepository{
         }
 
 
+    }
+
+    public Passenger findPassengerByMobileNumber(String mobileNumer) throws SQLException {
+
+        String sql = """
+                SELECT *
+                FROM passenger 
+                WHERE mobile_number = (?)
+                """;
+
+        try(Connection connection = getConnection();
+        PreparedStatement pstmt = connection.prepareStatement(sql)){
+
+            pstmt.setString(1,mobileNumer);
+
+            try( ResultSet rs = pstmt.executeQuery()){
+
+                if( ! rs.next()){
+
+                    return null;
+                }
+                Passenger passenger = BeanFactory.getInstance().createPassanger();
+                passenger.setPassengerId(rs.getString("passenger_id"));
+                passenger.setEmail(rs.getString("email"));
+                passenger.setMobileNumber(rs.getString("mobile_number"));
+                passenger.setPassengerName(rs.getString("passenger_name"));
+                passenger.setPassword(rs.getString("password"));
+
+                return passenger;
+            }
+        }
     }
 
 

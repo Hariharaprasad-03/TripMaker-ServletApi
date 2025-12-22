@@ -69,4 +69,14 @@ public class PassengerService {
         }
         return true;
     }
+
+    public Passenger getPassengerById(String id)throws  SQLException{
+
+        return passengerRepository.findPassengerById(id);
+    }
+
+    public Passenger getPassengerByMobileNumber(String mobileNumber)throws SQLException{
+
+        return passengerRepository.findPassengerByMobileNumber(mobileNumber);
+    }
 }

@@ -29,7 +29,7 @@ public class RouteRepository extends BaseRepository{
     }
 
     public String findRouteIdBySourceAndDestination(String source, String destination) throws SQLException {
-        String sql = "SELECT route_id FROM route WHERE source = ? AND destination = ?";
+        String sql = "SELECT route_id FROM route WHERE source = (?) AND destination = (?)";
 
         try (Connection connection = getConnection();
              PreparedStatement pstmt = connection.prepareStatement(sql)) {
@@ -61,6 +61,9 @@ public class RouteRepository extends BaseRepository{
 
             try( ResultSet rs = pstmt.executeQuery()){
 
+                if( ! rs.next()){
+                    return null ;
+                }
                 route.setRouteId(rs.getString("route_id"));
                 route.setSource(rs.getString("source"));
                 route.setDestination(rs.getString("destination"));

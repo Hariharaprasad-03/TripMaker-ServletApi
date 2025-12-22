@@ -4,6 +4,7 @@ import com.zsgs.busbooking.config.BeanFactory;
 import com.zsgs.busbooking.enums.BusStatus;
 import com.zsgs.busbooking.enums.BusType;
 import com.zsgs.busbooking.model.Bus;
+import com.zsgs.busbooking.model.Seat;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -127,6 +128,46 @@ public class BusRepository extends BaseRepository{
         }
 
 
+
+    }
+
+    public boolean saveSeats(Seat seat) throws SQLException {
+
+        String sql = "INSERT INTO seat (seat_number, bus_id, row_num, col_num, seat_type)VALUES (?, ?, ?, ?, ?)";
+
+        try( Connection connection = getConnection();
+        PreparedStatement pstmt = connection.prepareStatement(sql)){
+
+            pstmt.setInt(1,seat.getSeatNumber());
+            pstmt.setString(2,seat.getBusId());
+            pstmt.setInt(3,seat.getRowNumber());
+            pstmt.setInt(4,seat.getColNumber());
+            pstmt.setString(5,String.valueOf(seat.getSeatType()));
+
+            int row = pstmt.executeUpdate();
+
+            return row>0;
+        }
+
+    }
+
+    public boolean updateBusStatus(String bus_id , BusStatus status) throws SQLException{
+
+        String sql = """
+                UPDATE bus 
+                SET  status = (?)
+                WHERE bus_id = (?)
+                """;
+        try( Connection connection = getConnection() ;
+        PreparedStatement pstmt = connection.prepareStatement(sql)){
+
+            pstmt.setString(1,status.toString());
+            pstmt.setString(2,bus_id);
+
+            int row = pstmt.executeUpdate();
+
+            return row >0;
+        }
 
     }
 

@@ -1,17 +1,21 @@
 package com.zsgs.busbooking;
 
+import com.zsgs.busbooking.config.AppContext;
+import com.zsgs.busbooking.config.BeanFactory;
 import com.zsgs.busbooking.enums.BusType;
-import com.zsgs.busbooking.payloads.AddBusRequest;
-import com.zsgs.busbooking.payloads.CreateTripRequest;
-import com.zsgs.busbooking.payloads.PassengerSignUpRequest;
+import com.zsgs.busbooking.model.Route;
+import com.zsgs.busbooking.payloads.*;
 import com.zsgs.busbooking.repositories.BusRepository;
 import com.zsgs.busbooking.repositories.PassengerRepository;
-import com.zsgs.busbooking.services.BusService;
-import com.zsgs.busbooking.services.PassengerService;
+import com.zsgs.busbooking.repositories.RouteRepository;
+import com.zsgs.busbooking.services.*;
 
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BusBooking {
 
@@ -31,7 +35,15 @@ public class BusBooking {
             busRequest.setBusRegistrationId("12345678");
             busRequest.setBusType(String.valueOf(BusType.NORMAL));
 
+            AddBusRequest busRequest2 = new AddBusRequest();
+
+            busRequest2.setBusNumber("TN23BR4844");
+            busRequest2.setBusName("SKMR");
+            busRequest2.setBusRegistrationId("12345679");
+            busRequest2.setBusType(String.valueOf(BusType.NORMAL));
+
             busService.addBus(busRequest);
+            busService.addBus(busRequest2);
 
             PassengerSignUpRequest p1 = new PassengerSignUpRequest();
             p1.setEmail("san@gmail.com");
@@ -41,11 +53,55 @@ public class BusBooking {
 
             passengerService.addPassenger(p1);
 
+            RouteService routeService = AppContext.getInstance().getRouteService();
+            Route route = BeanFactory.getInstance().createRoute();
+            route.setSource("vellore");
+            route.setDestination("Arni");
+            route.setDistanceKm(40);
 
+            Route velloreToThiruppathur = BeanFactory.
+                    getInstance().createRoute();
 
+            velloreToThiruppathur.setSource("vellore");
+            velloreToThiruppathur.setDestination("thiruppathur");
+            velloreToThiruppathur.setDistanceKm(85);
 
+            routeService.addRouteService(velloreToThiruppathur);
+            routeService.addRouteService(route);
 
+            CreateTripRequest tripRequest1 = new CreateTripRequest("TN23BR4843", "SKMR", "vellore", "arni", LocalTime.now(), LocalTime.of(18,00), LocalDate.now());
+            CreateTripRequest tripRequest2 = new CreateTripRequest("TN23BR4844", "SKMS", "vellore", "thiruppathur", LocalTime.now(), LocalTime.of(19,00), LocalDate.now());
 
+            TripService tripService = AppContext.getInstance().getTripService();
+
+            tripService.createTrip(tripRequest1);
+            tripService.createTrip(tripRequest2);
+
+            List<TripDto> dto = tripService.getAllTrips();
+
+            for ( TripDto d : dto){
+                System.out.println(d);
+            }
+            List<TripDto> getdtos = tripService.getAllTripsBySourceAndDestinationWithDate("vellore" , "arni",LocalDate.now());
+
+            for(TripDto d: getdtos){
+                System.out.println(d);
+            }
+
+            List<Integer> seats = new ArrayList<>();
+            seats.addAll(List.of(1,2,3,4));
+
+            BookingRequest bookingRequest = new BookingRequest("TRIP001",
+                    "BUS001" ,
+                    seats,
+                    "9278111111",
+                    "san@oksbi ",
+                    seats.size()
+            );
+
+            BookingServices bookingServices = AppContext.getInstance().getBookingServices();
+
+            bookingServices.BookTripWithAtomicity(bookingRequest);
 
 
 
@@ -53,6 +109,7 @@ public class BusBooking {
 
         } catch (SQLIntegrityConstraintViolationException e) {
 
+            e.printStackTrace();
             if (e.getErrorCode() == 1062) {
 
                 String msg = e.getMessage();
@@ -83,7 +140,7 @@ public class BusBooking {
         }
         catch (Exception e){
 
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
     }
