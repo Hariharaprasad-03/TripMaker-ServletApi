@@ -7,6 +7,7 @@ import com.zsgs.busbooking.exception.InvalidRequest;
 import com.zsgs.busbooking.model.*;
 import com.zsgs.busbooking.payloads.BookingRequest;
 
+import com.zsgs.busbooking.payloads.UserBookingDto;
 import com.zsgs.busbooking.repositories.BookingRepository;
 import com.zsgs.busbooking.repositories.PaymentRepository;
 import com.zsgs.busbooking.util.IdGenerator;
@@ -215,6 +216,11 @@ public class BookingServices {
                 conn.close();
             }
         }
+    }
+
+    public List<UserBookingDto> getPassengerBookings(String passengerId) throws SQLException{
+
+        return bookingRepository.getPassengerBookings(passengerId);
     }
 
 

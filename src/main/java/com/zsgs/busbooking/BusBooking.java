@@ -3,11 +3,12 @@ package com.zsgs.busbooking;
 import com.zsgs.busbooking.config.AppContext;
 import com.zsgs.busbooking.config.BeanFactory;
 import com.zsgs.busbooking.enums.BusType;
+import com.zsgs.busbooking.model.Bus;
 import com.zsgs.busbooking.model.Route;
 import com.zsgs.busbooking.payloads.*;
 import com.zsgs.busbooking.repositories.BusRepository;
 import com.zsgs.busbooking.repositories.PassengerRepository;
-import com.zsgs.busbooking.repositories.RouteRepository;
+
 import com.zsgs.busbooking.services.*;
 
 import java.sql.SQLException;
@@ -77,7 +78,7 @@ public class BusBooking {
             tripService.createTrip(tripRequest1);
             tripService.createTrip(tripRequest2);
 
-            List<TripDto> dto = tripService.getAllTrips();
+            List<TripDto> dto = tripService.getCurrentTrips();
 
             for ( TripDto d : dto){
                 System.out.println(d);
@@ -102,6 +103,14 @@ public class BusBooking {
             BookingServices bookingServices = AppContext.getInstance().getBookingServices();
 
             bookingServices.BookTripWithAtomicity(bookingRequest);
+
+
+            List<BusDto> busdtos = busService.getAllBuses();
+
+            for(BusDto busdto : busdtos){
+
+                System.out.println(busdto);
+            }
 
 
 

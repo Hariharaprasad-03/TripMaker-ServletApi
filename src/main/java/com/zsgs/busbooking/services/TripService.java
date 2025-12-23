@@ -10,6 +10,7 @@ import com.zsgs.busbooking.model.Route;
 import com.zsgs.busbooking.model.Trip;
 import com.zsgs.busbooking.payloads.CreateTripRequest;
 import com.zsgs.busbooking.payloads.TripDto;
+import com.zsgs.busbooking.payloads.UpdatetripRequest;
 import com.zsgs.busbooking.repositories.TripRepository;
 import com.zsgs.busbooking.stratergy.PricingStratergy;
 import com.zsgs.busbooking.stratergy.PricingStratergyFactory;
@@ -82,6 +83,7 @@ public class TripService {
         int distance = routeService.getRouteById(routeId).getDistanceKm();
 
 
+
         Trip trip = BeanFactory.getInstance().createTrip();
         trip.setTripId(new IdGenerator().genarateId("TRIP", id++));
         trip.setTripDate(request.tripDate());
@@ -102,10 +104,10 @@ public class TripService {
             throw new InvalidRequest("Trip creation failed");
         }
 
-        if (busId != null) {
-            tripRepository.renderTripSeats(trip.getTripId(), busId);
-//            busService.setBusStatus(busId,BusStatus.ACTIVE);
-        }
+
+        tripRepository.renderTripSeats(trip.getTripId(), busId);
+        busService.setBusCurrentTrip(busId,trip.getTripId());
+        busService.setBusStatus(busId ,BusStatus.ACTIVE);
 
         return trip;
     }
@@ -177,6 +179,23 @@ public class TripService {
         return tripRepository.findTripById(tripId);
 
 
+    }
+
+    public List<TripDto> getCurrentTrips()throws SQLException{
+
+        List<TripDto> tripDtos = tripRepository.getCurrentTrips();
+
+        return tripDtos;
+    }
+
+    public void updateTrip (UpdatetripRequest request)throws SQLException {
+
+        tripRepository.updateTrip(request);
+    }
+
+    public boolean updateTripStatus( String tripId , String status)throws SQLException {
+
+        return tripRepository.updateTripStatus(tripId, status);
     }
 
 

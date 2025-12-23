@@ -82,7 +82,7 @@ public class PassengerRepository extends BaseRepository{
 
         try(  Connection connection = getConnection();
         PreparedStatement pstmt = connection.prepareStatement(sql) ) {
-
+            connection.close();
             pstmt.setString(1,email);
             ResultSet rs = pstmt.executeQuery();
             int count = 0 ;

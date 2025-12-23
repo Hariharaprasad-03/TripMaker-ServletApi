@@ -7,7 +7,7 @@ import java.util.List;
 
 public record UserBookingDto(
 
-        // Booking
+        // Need for Booking
         String bookingId,
         String passengerId,
         String bookingStatus,
@@ -16,7 +16,7 @@ public record UserBookingDto(
         LocalDateTime createdAt,
         List<Integer> seatNumbers,
 
-        // Trip
+        //Needed trip details
         String tripId,
         String source,
         String destination,
@@ -25,7 +25,7 @@ public record UserBookingDto(
         LocalTime endTime,
         double distanceKm,
 
-        // Bus
+        // Needed Bus Details
         String busId,
         String busName,
         String busNumber

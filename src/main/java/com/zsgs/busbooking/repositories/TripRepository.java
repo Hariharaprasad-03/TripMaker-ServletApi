@@ -5,6 +5,7 @@ import com.zsgs.busbooking.enums.BusType;
 import com.zsgs.busbooking.enums.TripStatus;
 import com.zsgs.busbooking.model.Trip;
 import com.zsgs.busbooking.payloads.TripDto;
+import com.zsgs.busbooking.payloads.UpdatetripRequest;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -253,4 +254,137 @@ public class TripRepository  extends BaseRepository{
             }
         }
     }
+
+    public List<TripDto> getCurrentTrips() {
+
+        String sql = """
+        SELECT
+            t.trip_id,
+            b.bus_name,
+            b.bus_number,
+            r.source,
+            r.destination,
+            r.distance_km,
+            t.start_time,
+            t.end_time,
+            t.date,
+            b.bus_type,
+            t.price
+        FROM trip t
+        JOIN route r ON t.route_id = r.route_id
+        JOIN bus b ON t.bus_id = b.bus_id
+        WHERE t.date >= CURRENT_DATE
+          AND t.status = 'ACTIVE'
+        ORDER BY t.date, t.start_time
+    """;
+
+        List<TripDto> trips = new ArrayList<>();
+
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+
+                TripDto dto = new TripDto(
+                        rs.getString("trip_id"),
+                        rs.getString("bus_name"),
+                        rs.getString("bus_number"),
+                        rs.getString("source"),
+                        rs.getString("destination"),
+                        rs.getInt("distance_km"),
+                        rs.getTime("start_time").toLocalTime(),
+                        rs.getTime("end_time").toLocalTime(),
+                        rs.getDate("date").toLocalDate(),
+                        BusType.valueOf(rs.getString("bus_type")),
+                        rs.getDouble("price")
+                );
+
+                trips.add(dto);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to fetch current trips", e);
+        }
+
+        return trips;
+    }
+
+    public  void updateTrip(UpdatetripRequest updateRequest)throws SQLException{
+
+        String sql = "UPDATE trip SET date = (?) ,start_time =(?) , end_time = (?)" +
+                "WHERE trip_id = (?)";
+
+        try(Connection connection = getConnection();
+        PreparedStatement pstmt = connection.prepareStatement(sql)){
+
+            pstmt.setDate(1,Date.valueOf(updateRequest.date()));
+            pstmt.setTime(2,Time.valueOf(updateRequest.startTime()));
+            pstmt.setTime(3,Time.valueOf(updateRequest.endTime()));
+
+            pstmt.executeUpdate();
+        }
+    }
+
+    public TripDto getTripDetailsById(String tripId)throws SQLException {
+
+        String sql = """
+                SELECT t.trip_id , t.start_time ,t.end_time ,t.price ,t.date,
+                       b.bus_id , b.bus_name , b.bus_number , b.bus_type,
+                       r.source , r.destination ,r.distance_km
+                FROM trip t
+                LEFT JOIN bus b on b.bus_id = t.bus_id 
+                LEFT JOIN route r on t.route_id = r.route_id
+                WHERE  trip_id = (?)
+                """;
+
+
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ) {
+
+            ps.setString(1,tripId);
+            ResultSet rs = ps.executeQuery();
+
+            if ( ! rs.next()) {
+
+                return null;
+
+            }
+            TripDto dto = new TripDto(
+                    rs.getString("trip_id"),
+                    rs.getString("bus_name"),
+                    rs.getString("bus_number"),
+                    rs.getString("source"),
+                    rs.getString("destination"),
+                    rs.getInt("distance_km"),
+                    rs.getTime("start_time").toLocalTime(),
+                    rs.getTime("end_time").toLocalTime(),
+                    rs.getDate("date").toLocalDate(),
+                    BusType.valueOf(rs.getString("bus_type")),
+                    rs.getDouble("price")
+            );
+            return dto;
+        }
+    }
+
+    public boolean updateTripStatus(String tripId , String status)throws  SQLException {
+
+        String sql = """
+               UPDATE trip
+               set status = (?)
+               where trip_id = (?)
+                """;
+
+        try( Connection connection = getConnection();
+        PreparedStatement pstmt  = connection.prepareStatement(sql)){
+
+            pstmt.setString(1,TripStatus.valueOf(status).toString());
+            pstmt.setString(2,tripId);
+
+            return pstmt.executeUpdate() >0 ;
+        }
+    }
+
+
 }

@@ -3,7 +3,6 @@ package com.zsgs.busbooking.Controllers;
 import com.google.gson.Gson;
 import com.zsgs.busbooking.config.AppContext;
 import com.zsgs.busbooking.payloads.PassengerSignUpRequest;
-import com.zsgs.busbooking.repositories.PassengerRepository;
 import com.zsgs.busbooking.services.PassengerService;
 
 import javax.servlet.ServletException;
@@ -34,14 +33,13 @@ public class UserController extends HttpServlet {
 
 
 
-    public void addPassenger(HttpServletRequest req , HttpServletResponse resp) throws IOException {
+    protected  void addPassenger(HttpServletRequest req , HttpServletResponse resp) throws IOException {
 
         resp.setContentType("application/json");
         PassengerService service = AppContext.getInstance().getPassengerService();
         Gson gson = new Gson();
 
         try{
-
 
             PassengerSignUpRequest request = gson.fromJson(req.getReader(),PassengerSignUpRequest.class);
             service.addPassenger(request);

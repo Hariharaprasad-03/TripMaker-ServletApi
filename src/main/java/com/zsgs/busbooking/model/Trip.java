@@ -16,7 +16,9 @@ public class Trip {
     private LocalDate tripDate;
     private double price ;
 
-    public Trip() {}
+    public Trip() {
+
+    }
 
     public Trip(String tripId, String busId, String routeId,
                 LocalTime startTime, LocalTime endTime) {

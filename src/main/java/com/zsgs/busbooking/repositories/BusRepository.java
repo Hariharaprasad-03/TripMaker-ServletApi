@@ -10,13 +10,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class BusRepository extends BaseRepository{
 
     public boolean addBus(Bus bus) throws SQLException {
 
-        String sql = "INSERT INTO bus (bus_id , bus_name ,bus_number ,bus_type ,bus_registration_id ,status) values( ?,?,?,?,?,?)";
+        String sql = "INSERT INTO bus (bus_id , bus_name ,bus_number ,bus_type ,bus_registration_id ,status,current_trip_id) values( ?,?,?,?,?,?,?)";
 
         try ( Connection connection = getConnection() ;
               PreparedStatement pstmt = connection.prepareStatement(sql)){
@@ -28,6 +30,10 @@ public class BusRepository extends BaseRepository{
             pstmt.setString(3,bus.getBusNumber());
             pstmt.setString(6,bus.getBusStatus().toString());
 
+
+
+            pstmt.setString(7,bus.getCurrentTripId());
+
              int row = pstmt.executeUpdate();
 
             return row > 0 ;
@@ -36,10 +42,12 @@ public class BusRepository extends BaseRepository{
 
     public  Bus findBusById(String id) throws SQLException{
 
-        String sql = "SELECT * FROM bus WHERE bus_id = (?)";
+        String sql = "SELECT * FROM bus WHERE bus_id = (?)" ;
 
-        try(Connection connection = getConnection();
-        PreparedStatement pstmt = connection.prepareStatement(sql)){
+
+        Connection connection = getConnection();
+        PreparedStatement pstmt = getConnection().prepareStatement(sql);
+        try{
 
             pstmt.setString(1,id);
 
@@ -56,7 +64,11 @@ public class BusRepository extends BaseRepository{
             bus.setBusRegistrationId(rs.getString("bus_registration_id"));
             bus.setBusNumber(rs.getString("bus_number"));
             bus.setBusStatus(BusStatus.valueOf(rs.getString("status")));
+
+
             return bus ;
+        }finally {
+            closeResourses(connection,pstmt);
         }
     }
 
@@ -170,6 +182,58 @@ public class BusRepository extends BaseRepository{
         }
 
     }
+
+    public void updateBusCurrentTrip(String busId , String tripId)throws SQLException{
+
+        String sql = "UPDATE bus SET current_trip_id = (?) WHERE bus_id =(?) ";
+
+        try(Connection connection = getConnection();
+        PreparedStatement pstmt = connection.prepareStatement(sql)){
+
+            pstmt.setString(1,tripId);
+            pstmt.setString(2,busId);
+
+
+            pstmt.executeUpdate();
+
+        }
+    }
+
+    public List<Bus> getAllBuses() throws SQLException {
+
+        String sql = """
+        SELECT bus_id, bus_name, bus_number, bus_type,
+               bus_registration_id, status, current_trip_id
+        FROM bus
+    """;
+
+        List<Bus> buses = new ArrayList<>();
+
+        try (Connection connection = getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+
+                Bus bus = new Bus();
+
+                bus.setBusId(rs.getString("bus_id"));
+                bus.setBusName(rs.getString("bus_name"));
+                bus.setBusNumber(rs.getString("bus_number"));
+                bus.setBusType(BusType.valueOf(rs.getString("bus_type")));
+                bus.setBusRegistrationId(rs.getString("bus_registration_id"));
+                bus.setBusStatus(BusStatus.valueOf(rs.getString("status")));
+                bus.setCurrentTripId(rs.getString("current_trip_id"));
+
+                buses.add(bus);
+            }
+        }
+
+        return buses;
+    }
+
+
+
 
 
 

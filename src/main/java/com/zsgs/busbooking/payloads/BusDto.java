@@ -1,11 +1,11 @@
-package com.zsgs.busbooking.model;
+package com.zsgs.busbooking.payloads;
 
 import com.zsgs.busbooking.enums.BusStatus;
 import com.zsgs.busbooking.enums.BusType;
 
-import java.time.LocalDate;
+import java.io.Serializable;
 
-public class Bus {
+public class BusDto implements Serializable {
 
     private String busId;
     private String busName;
@@ -13,17 +13,9 @@ public class Bus {
     private BusType busType;
     private String busNumber;
     private BusStatus busStatus;
-    private String currentTripId;
+    private TripDto tripDto ;
 
-    public Bus() {}
-
-    public Bus(String busId, String busName, String busModel, String busNumber,BusType busType, LocalDate busRegistrationDate , String busRegistrationId) {
-        this.busId = busId;
-        this.busName = busName;
-        this.busType = busType;
-        this.busNumber = busNumber ;
-        this.busRegistrationId = busRegistrationId ;
-
+    public BusDto() {
     }
 
     public String getBusId() {
@@ -62,6 +54,10 @@ public class Bus {
         return busNumber;
     }
 
+    public void setBusNumber(String busNumber) {
+        this.busNumber = busNumber;
+    }
+
     public BusStatus getBusStatus() {
         return busStatus;
     }
@@ -70,16 +66,24 @@ public class Bus {
         this.busStatus = busStatus;
     }
 
-
-    public void setBusNumber(String busNumber) {
-        this.busNumber = busNumber;
+    public TripDto getTripDto() {
+        return tripDto;
     }
 
-    public String getCurrentTripId() {
-        return currentTripId;
+    public void setTripDto(TripDto tripDto) {
+        this.tripDto = tripDto;
     }
 
-    public void setCurrentTripId(String currentTrip) {
-        this.currentTripId = currentTrip;
+    @Override
+    public String toString() {
+        return "BusDto{" +
+                "busId='" + busId + '\'' +
+                ", busName='" + busName + '\'' +
+                ", busRegistrationId='" + busRegistrationId + '\'' +
+                ", busType=" + busType +
+                ", busNumber='" + busNumber + '\'' +
+                ", busStatus=" + busStatus +
+                ", tripDto=" + tripDto +
+                '}';
     }
 }

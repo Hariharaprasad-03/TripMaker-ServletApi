@@ -8,16 +8,20 @@ import com.zsgs.busbooking.exception.DuplicateEntityException;
 import com.zsgs.busbooking.model.Bus;
 import com.zsgs.busbooking.model.Seat;
 import com.zsgs.busbooking.payloads.AddBusRequest;
+import com.zsgs.busbooking.payloads.BusDto;
+import com.zsgs.busbooking.payloads.TripDto;
 import com.zsgs.busbooking.repositories.BusRepository;
+import com.zsgs.busbooking.repositories.TripRepository;
 import com.zsgs.busbooking.util.IdGenerator;
 
-import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 public class BusService {
 
 
     private final BusRepository busRepository;
+    private  final TripRepository tripRepository = new TripRepository();
     private  long id = 1;
 
     public BusService (BusRepository repository){
@@ -40,6 +44,7 @@ public class BusService {
         newBus.setBusRegistrationId(request.getBusRegistrationId());
         newBus.setBusName(request.getBusName());
         newBus.setBusType(BusType.valueOf(request.getBusType()));
+        newBus.setCurrentTripId(null);
 
 
         if(busRepository.addBus(newBus) ) {
@@ -100,6 +105,48 @@ public class BusService {
         }
 
     }
+
+    public void setBusCurrentTrip(String busId , String tripId)throws SQLException{
+
+        busRepository.updateBusCurrentTrip(busId, tripId);
+    }
+
+    public List<BusDto> getAllBuses() throws SQLException {
+
+        List<Bus> buses = busRepository.getAllBuses();
+
+        return buses.stream()
+                .map(bus -> {
+
+                    BusDto dto = new BusDto();
+
+                    dto.setBusId(bus.getBusId());
+                    dto.setBusName(bus.getBusName());
+                    dto.setBusNumber(bus.getBusNumber());
+                    dto.setBusType(bus.getBusType());
+                    dto.setBusRegistrationId(bus.getBusRegistrationId());
+                    dto.setBusStatus(bus.getBusStatus());
+
+
+                    if (bus.getCurrentTripId() != null) {
+
+
+                        try {
+
+                            TripDto tripDto = tripRepository.getTripDetailsById(bus.getCurrentTripId());
+                            dto.setTripDto(tripDto);
+                        }
+                        catch (SQLException e){
+
+                            e.printStackTrace();
+                        }
+                    }
+
+                    return dto;
+                })
+                .toList();
+    }
+
 
 
 }
