@@ -11,6 +11,7 @@ import com.zsgs.busbooking.payloads.UserBookingDto;
 import com.zsgs.busbooking.repositories.BookingRepository;
 import com.zsgs.busbooking.repositories.PaymentRepository;
 import com.zsgs.busbooking.util.IdGenerator;
+import com.zsgs.busbooking.util.IdGeneratorUtil;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -182,7 +183,7 @@ public class BookingServices {
 //            paymentRepository.pay(conn, payment);
 
             Booking booking = Booking.builder().
-                    withBookingId(new IdGenerator().genarateId("BOOK", id++)).
+                    withBookingId(new IdGeneratorUtil().generateId("BOOKING")).
                     withBusId(busId).
                     withPaymentId(payment.getPaymentId()).
                     withPrice(seats.size() * trip.getPrice()).

@@ -5,6 +5,7 @@ import com.zsgs.busbooking.exception.InvalidRequest;
 import com.zsgs.busbooking.model.Route;
 import com.zsgs.busbooking.repositories.RouteRepository;
 import com.zsgs.busbooking.util.IdGenerator;
+import com.zsgs.busbooking.util.IdGeneratorUtil;
 
 import java.sql.SQLException;
 
@@ -43,7 +44,7 @@ public class RouteService {
             throw  new DuplicateEntityException(" Already route is available ");
         }
 
-        route.setRouteId( new IdGenerator().genarateId("ROUTE",id++));
+        route.setRouteId( new IdGeneratorUtil().generateId("ROUTE"));
 
         if (routeRepository.addRoute(route)){
             return route;

@@ -10,6 +10,7 @@ import com.zsgs.busbooking.repositories.BusRepository;
 import com.zsgs.busbooking.repositories.PassengerRepository;
 
 import com.zsgs.busbooking.services.*;
+import com.zsgs.busbooking.util.IdGeneratorUtil;
 
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -23,6 +24,8 @@ public class BusBooking {
     public static  void main(String[] args){
 
         try {
+
+
             PassengerService passengerService = new PassengerService( new PassengerRepository());
             BusService busService = new BusService(new BusRepository());
 
@@ -93,10 +96,10 @@ public class BusBooking {
             seats.addAll(List.of(1,2,3,4));
 
             BookingRequest bookingRequest = new BookingRequest("TRIP001",
-                    "BUS001" ,
+                    "BUS010" ,
                     seats,
                     "9278111111",
-                    "san@oksbi ",
+                    "san@oksbi",
                     seats.size()
             );
 

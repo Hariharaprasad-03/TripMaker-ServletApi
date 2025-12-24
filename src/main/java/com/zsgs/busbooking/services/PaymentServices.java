@@ -3,6 +3,7 @@ package com.zsgs.busbooking.services;
 import com.zsgs.busbooking.model.Payment;
 import com.zsgs.busbooking.repositories.PaymentRepository;
 import com.zsgs.busbooking.util.IdGenerator;
+import com.zsgs.busbooking.util.IdGeneratorUtil;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -22,7 +23,7 @@ public class PaymentServices {
     }
 
     public void pay(Connection connection , Payment payment) throws SQLException{
-        payment.setPaymentId( new IdGenerator().genarateId("PAY",id++));
+        payment.setPaymentId( new IdGeneratorUtil().generateId("PAY"));
         paymentRepository.pay(connection,payment);
     }
 }

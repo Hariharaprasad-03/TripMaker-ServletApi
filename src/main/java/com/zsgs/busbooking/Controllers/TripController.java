@@ -7,6 +7,7 @@ import com.zsgs.busbooking.payloads.CreateTripRequest;
 import com.zsgs.busbooking.payloads.TripDto;
 import com.zsgs.busbooking.payloads.UpdatetripRequest;
 import com.zsgs.busbooking.services.TripService;
+import com.zsgs.busbooking.util.GsonUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,11 +18,11 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-@WebServlet("api/trip")
+
 public class TripController extends HttpServlet {
 
     TripService tripService = AppContext.getInstance().getTripService();
-    Gson gson = new Gson();
+    Gson gson = GsonUtil.getGson();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

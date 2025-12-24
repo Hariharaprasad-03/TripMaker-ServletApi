@@ -8,13 +8,14 @@ import com.zsgs.busbooking.payloads.PassengerSignUpRequest;
 import com.zsgs.busbooking.repositories.PassengerRepository;
 import com.zsgs.busbooking.util.CrediantialsValidator;
 import com.zsgs.busbooking.util.IdGenerator;
+import com.zsgs.busbooking.util.IdGeneratorUtil;
 
 import java.sql.SQLException;
 
 public class PassengerService {
 
     private final PassengerRepository passengerRepository;
-    private static long id = 1 ;
+    private static long id = 20 ;
 
     public PassengerService(PassengerRepository passengerRepository){
 
@@ -24,11 +25,11 @@ public class PassengerService {
     public Passenger addPassenger(PassengerSignUpRequest request) throws SQLException {
 
         validateEmail(request.getEmail());
-        validateMoblieNumber(request.getMobileNumber());
+        validateMoblieNumber(request.getMobileNumber().trim());
 
         Passenger passenger = BeanFactory.getInstance().createPassanger();
 
-        passenger.setPassengerId(new IdGenerator().genarateId("PASG",++id));
+        passenger.setPassengerId(new IdGeneratorUtil().generateId("PASG"));
         passenger.setPassengerName(request.getPassengerName());
         passenger.setPassword(request.getPassword());
         passenger.setMobileNumber(request.getMobileNumber());
@@ -62,7 +63,7 @@ public class PassengerService {
     public boolean validateMoblieNumber(String mobile) throws SQLException {
 
         if ( ! new CrediantialsValidator().validateMobileNumber(mobile)){
-            throw new  InvalidCreadiantialsExcaption(" mobile Number is valid");
+            throw new  InvalidCreadiantialsExcaption(" mobile Number is Invalid");
         }
         if(passengerRepository.ifMobileNumberAlreadyExist(mobile)) {
             throw new DuplicateEntityException(" Mobile Number Already Used");
@@ -78,5 +79,9 @@ public class PassengerService {
     public Passenger getPassengerByMobileNumber(String mobileNumber)throws SQLException{
 
         return passengerRepository.findPassengerByMobileNumber(mobileNumber);
+    }
+    public Passenger getPassengerByEmail(String email) throws SQLException {
+
+        return passengerRepository.findPassenerByEmail(email);
     }
 }

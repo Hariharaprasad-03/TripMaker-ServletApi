@@ -13,6 +13,7 @@ import com.zsgs.busbooking.payloads.TripDto;
 import com.zsgs.busbooking.repositories.BusRepository;
 import com.zsgs.busbooking.repositories.TripRepository;
 import com.zsgs.busbooking.util.IdGenerator;
+import com.zsgs.busbooking.util.IdGeneratorUtil;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -22,7 +23,7 @@ public class BusService {
 
     private final BusRepository busRepository;
     private  final TripRepository tripRepository = new TripRepository();
-    private  long id = 1;
+    private  long id = 10;
 
     public BusService (BusRepository repository){
         this.busRepository = repository;
@@ -38,7 +39,7 @@ public class BusService {
         }
         Bus newBus = BeanFactory.getInstance().createBus();
 
-        newBus.setBusId( new IdGenerator().genarateId("BUS",id++));
+        newBus.setBusId( new IdGeneratorUtil().generateId("BUS"));
         newBus.setBusStatus(BusStatus.FREE);
         newBus.setBusNumber(request.getBusNumber());
         newBus.setBusRegistrationId(request.getBusRegistrationId());

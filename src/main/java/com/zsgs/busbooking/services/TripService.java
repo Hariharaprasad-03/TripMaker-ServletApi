@@ -15,6 +15,7 @@ import com.zsgs.busbooking.repositories.TripRepository;
 import com.zsgs.busbooking.stratergy.PricingStratergy;
 import com.zsgs.busbooking.stratergy.PricingStratergyFactory;
 import com.zsgs.busbooking.util.IdGenerator;
+import com.zsgs.busbooking.util.IdGeneratorUtil;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -85,7 +86,7 @@ public class TripService {
 
 
         Trip trip = BeanFactory.getInstance().createTrip();
-        trip.setTripId(new IdGenerator().genarateId("TRIP", id++));
+        trip.setTripId(new IdGeneratorUtil().generateId("TRIP"));
         trip.setTripDate(request.tripDate());
         trip.setStartTime(request.startTime());
         trip.setEndTime(request.endTime());

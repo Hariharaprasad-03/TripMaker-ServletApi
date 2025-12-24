@@ -217,7 +217,7 @@ public class BookingRepository extends BaseRepository {
         String sql =
                 "UPDATE trip_seat " +
                         "SET status = 'BOOKED' " +
-                        ", booking_id = (?)" +
+                        ",booking_id = (?)" +
                         "WHERE trip_id = ? " +
                         "AND bus_id = ? " +
                         "AND seat_number IN (" + placeholders + ")";
