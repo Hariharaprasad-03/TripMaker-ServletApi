@@ -35,6 +35,8 @@ public class LoginServlet extends HttpServlet {
             String mobileNumber = (String) req.getParameter("mobileNumber");
             String password = (String) req.getParameter("password");
 
+
+
             Passenger passenger = passengerService.getPassengerByMobileNumber(mobileNumber);
             if (passenger == null){
                 resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -44,6 +46,9 @@ public class LoginServlet extends HttpServlet {
             if ( PasswordUtil.verifyPassword(password,passenger.getPassword())){
 
                 String token = JwtUtil.generateToken(passenger.getMobileNumber(), "PASSENGER");
+
+                System.out.println(mobileNumber);
+                System.out.println(token);
 
                 Map<String, Object> responseData = new HashMap<>();
                 responseData.put("success", true);
@@ -58,6 +63,10 @@ public class LoginServlet extends HttpServlet {
 
                 System.out.println(passenger.getPassengerId());
 
+            }
+            else {
+
+                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             }
         } catch (SQLException e) {
             e.printStackTrace();

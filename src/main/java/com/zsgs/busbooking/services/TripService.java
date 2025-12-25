@@ -8,9 +8,7 @@ import com.zsgs.busbooking.exception.InvalidRequest;
 import com.zsgs.busbooking.model.Bus;
 import com.zsgs.busbooking.model.Route;
 import com.zsgs.busbooking.model.Trip;
-import com.zsgs.busbooking.payloads.CreateTripRequest;
-import com.zsgs.busbooking.payloads.TripDto;
-import com.zsgs.busbooking.payloads.UpdatetripRequest;
+import com.zsgs.busbooking.payloads.*;
 import com.zsgs.busbooking.repositories.TripRepository;
 import com.zsgs.busbooking.stratergy.PricingStratergy;
 import com.zsgs.busbooking.stratergy.PricingStratergyFactory;
@@ -21,6 +19,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 public class TripService {
 
@@ -197,6 +196,29 @@ public class TripService {
     public boolean updateTripStatus( String tripId , String status)throws SQLException {
 
         return tripRepository.updateTripStatus(tripId, status);
+    }
+
+
+    public  synchronized TripSeatResponse getTripStatusData(String tripId, String busId) throws SQLException {
+
+
+        TripSeatResponse response = new TripSeatResponse();
+
+        Trip trip = getTripById(tripId);
+
+        if ( trip == null  || ! trip.getBusId().equals(busId)) {
+            throw new InvalidRequest("trip not availale");
+        }
+        response.setTripId(tripId);
+        response.setSeatPrice(trip.getPrice());
+        response.setBusId(busId);
+
+        List<SeatDto> seats = tripRepository.getSeatsDataOfTrip(tripId,busId);
+
+        response.setSeats(seats);
+
+        return response;
+
     }
 
 

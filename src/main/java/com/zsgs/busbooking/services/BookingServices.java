@@ -139,7 +139,7 @@ public class BookingServices {
             String busId = request.busId().trim();
             String tripId = request.tripId().trim();
             List<Integer> seats = request.seats();
-//            String passengerId = request.passengerId().trim();
+            String passengerId = request.passengerId().trim();
             String mobileNumber = request.regusteredMobileNumber().trim();
             String paymentId = request.paymentId().trim();
 
@@ -156,6 +156,7 @@ public class BookingServices {
             }
 
             Passenger passenger = passengerService.getPassengerByMobileNumber(mobileNumber);
+            passenger = passengerService.getPassengerById(passengerId);
 
             if (passenger == null) {
 

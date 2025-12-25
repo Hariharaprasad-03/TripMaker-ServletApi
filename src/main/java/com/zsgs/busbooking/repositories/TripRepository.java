@@ -2,8 +2,11 @@ package com.zsgs.busbooking.repositories;
 
 import com.zsgs.busbooking.config.BeanFactory;
 import com.zsgs.busbooking.enums.BusType;
+import com.zsgs.busbooking.enums.SeatStatus;
+import com.zsgs.busbooking.enums.SeatType;
 import com.zsgs.busbooking.enums.TripStatus;
 import com.zsgs.busbooking.model.Trip;
+import com.zsgs.busbooking.payloads.SeatDto;
 import com.zsgs.busbooking.payloads.TripDto;
 import com.zsgs.busbooking.payloads.UpdatetripRequest;
 
@@ -383,6 +386,44 @@ public class TripRepository  extends BaseRepository{
             pstmt.setString(2,tripId);
 
             return pstmt.executeUpdate() >0 ;
+        }
+    }
+
+    public List<SeatDto> getSeatsDataOfTrip(String tripId , String busId) throws SQLException{
+
+        String sql = """
+                SELECT  ts.seat_number , ts.status , s.seat_type , s.row_num , s.col_num
+                FROM trip_seat ts
+                LEFT JOIN seat s on  ts.seat_number = s.seat_number
+                WHERE s.bus_id =(?) and ts.trip_id = (?)
+                """;
+
+        try( Connection connection = getConnection();
+        PreparedStatement pstmt = connection.prepareStatement(sql) ){
+
+            pstmt.setString(1,busId);
+            pstmt.setString(2,tripId);
+
+            List<SeatDto> response = new ArrayList<>();
+
+            try( ResultSet rs = pstmt.executeQuery()){
+
+                while( rs.next() ){
+
+                    SeatDto seat = new SeatDto(
+                            rs.getInt("seat_number"),
+                            rs.getInt("row_num"),
+                            rs.getInt("col_num"),
+                            SeatStatus.valueOf(rs.getString("status")),
+                            SeatType.valueOf(rs.getString("seat_type"))
+                    );
+
+                    response.add(seat);
+
+
+                }
+            }
+            return response;
         }
     }
 

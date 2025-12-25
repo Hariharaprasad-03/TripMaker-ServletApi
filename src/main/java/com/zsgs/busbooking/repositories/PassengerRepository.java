@@ -34,17 +34,19 @@ public class PassengerRepository extends BaseRepository{
              PreparedStatement pstmt = connection.prepareStatement(sql)) {
 
             pstmt.setString(1, id);
-            ResultSet rs = pstmt.executeQuery();
+
+            try(ResultSet rs = pstmt.executeQuery()) {
 
 
-            if (rs.next()) {
-                Passenger passenger = new Passenger();
-                passenger.setPassengerId(rs.getString("passenger_id"));
-                passenger.setPassengerName(rs.getString("passenger_name"));
-                passenger.setMobileNumber(rs.getString("mobile_number"));
-                passenger.setEmail(rs.getString("email"));
-                passenger.setPassword(rs.getString("password"));
-                return passenger;
+                if (rs.next()) {
+                    Passenger passenger = new Passenger();
+                    passenger.setPassengerId(rs.getString("passenger_id"));
+                    passenger.setPassengerName(rs.getString("passenger_name"));
+                    passenger.setMobileNumber(rs.getString("mobile_number"));
+                    passenger.setEmail(rs.getString("email"));
+                    passenger.setPassword(rs.getString("password"));
+                    return passenger;
+                }
             }
         }
 
@@ -59,16 +61,17 @@ public class PassengerRepository extends BaseRepository{
         PreparedStatement pstmt = connection.prepareStatement(sql))  {
 
             pstmt.setString(1, email);
-            ResultSet rs = pstmt.executeQuery();
+            try(ResultSet rs = pstmt.executeQuery()) {
 
-            if (rs.next()) {
-                Passenger passenger = new Passenger();
-                passenger.setPassengerId(rs.getString("passenger_id"));
-                passenger.setPassengerName(rs.getString("passenger_name"));
-                passenger.setMobileNumber(rs.getString("mobile_number"));
-                passenger.setEmail(rs.getString("email"));
-                passenger.setPassword(rs.getString("password"));
-                return passenger;
+                if (rs.next()) {
+                    Passenger passenger = new Passenger();
+                    passenger.setPassengerId(rs.getString("passenger_id"));
+                    passenger.setPassengerName(rs.getString("passenger_name"));
+                    passenger.setMobileNumber(rs.getString("mobile_number"));
+                    passenger.setEmail(rs.getString("email"));
+                    passenger.setPassword(rs.getString("password"));
+                    return passenger;
+                }
             }
         }
 
@@ -84,13 +87,14 @@ public class PassengerRepository extends BaseRepository{
         PreparedStatement pstmt = connection.prepareStatement(sql) ) {
             connection.close();
             pstmt.setString(1,email);
-            ResultSet rs = pstmt.executeQuery();
-            int count = 0 ;
+            try(ResultSet rs = pstmt.executeQuery()) {
+                int count = 0;
 
-           if ( rs.next()) {
-               count = rs.getInt(1);
-               return count > 0;
-           }
+                if (rs.next()) {
+                    count = rs.getInt(1);
+                    return count > 0;
+                }
+            }
         }
         return false;
     }
@@ -102,14 +106,15 @@ public class PassengerRepository extends BaseRepository{
         PreparedStatement pstmt = connection.prepareStatement(sql)) {
 
             pstmt.setString(1,mobile);
-            ResultSet rs = pstmt.executeQuery();
+            try(ResultSet rs = pstmt.executeQuery()) {
 
-            int count =0 ;
-            if ( rs.next()){
-                 count = rs.getInt(1);
+                int count = 0;
+                if (rs.next()) {
+                    count = rs.getInt(1);
 
+                }
+                return count > 0;
             }
-            return count > 0;
         }
 
 

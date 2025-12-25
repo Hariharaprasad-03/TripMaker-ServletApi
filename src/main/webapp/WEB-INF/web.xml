@@ -46,6 +46,15 @@
         <servlet-name>Signup</servlet-name>
         <url-pattern>/signUp</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>TripSeatData</servlet-name>
+        <servlet-class>com.zsgs.busbooking.servlets.TripSeatsServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>TripSeatData</servlet-name>
+        <url-pattern>/seats</url-pattern>
+    </servlet-mapping>
 
 
     <filter>

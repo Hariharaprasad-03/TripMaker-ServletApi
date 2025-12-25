@@ -9,6 +9,7 @@ public record BookingRequest(
         List<Integer> seats,
 
         String regusteredMobileNumber,
+        String passengerId,
         String paymentId,
         int numberOfSeats
 )implements Serializable {

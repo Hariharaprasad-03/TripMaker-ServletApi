@@ -46,8 +46,8 @@ public class BusBooking {
             busRequest2.setBusRegistrationId("12345679");
             busRequest2.setBusType(String.valueOf(BusType.NORMAL));
 
-            busService.addBus(busRequest);
-            busService.addBus(busRequest2);
+            busService.addBus(busRequest); //"BUS001"
+            busService.addBus(busRequest2); // BUS002
 
             PassengerSignUpRequest p1 = new PassengerSignUpRequest();
             p1.setEmail("san@gmail.com");
@@ -71,10 +71,15 @@ public class BusBooking {
             velloreToThiruppathur.setDistanceKm(85);
 
             routeService.addRouteService(velloreToThiruppathur);
+            // ROUTE001
             routeService.addRouteService(route);
+            // ROUTE002
+
 
             CreateTripRequest tripRequest1 = new CreateTripRequest("TN23BR4843", "SKMR", "vellore", "arni", LocalTime.now(), LocalTime.of(18,00), LocalDate.now());
+            // TRIP001
             CreateTripRequest tripRequest2 = new CreateTripRequest("TN23BR4844", "SKMS", "vellore", "thiruppathur", LocalTime.now(), LocalTime.of(19,00), LocalDate.now());
+            // TRIP002
 
             TripService tripService = AppContext.getInstance().getTripService();
 
@@ -96,9 +101,10 @@ public class BusBooking {
             seats.addAll(List.of(1,2,3,4));
 
             BookingRequest bookingRequest = new BookingRequest("TRIP001",
-                    "BUS010" ,
+                    "BUS001" ,
                     seats,
                     "9278111111",
+                    "PASG001",
                     "san@oksbi",
                     seats.size()
             );
