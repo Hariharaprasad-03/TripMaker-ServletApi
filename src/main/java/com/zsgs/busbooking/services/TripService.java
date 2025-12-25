@@ -49,13 +49,12 @@ public class TripService {
             throw new InvalidRequest("Bad request: missing fields");
         }
 
-        // Normalize
+       // Normalize
         String busNumber   = request.busNumber().trim();
         String source      = request.source().trim().toLowerCase();
         String destination = request.destination().trim().toLowerCase();
 
         Bus bus = busService.getBusByNumber(busNumber);
-
         // Date validation
         if (request.tripDate().isBefore(LocalDate.now())) {
             throw new InvalidRequest("Trip date cannot be in the past");
@@ -73,7 +72,6 @@ public class TripService {
             throw new InvalidRequest("Bus is not available for this schedule");
         }
 
-
         String routeId = validateRoute(source, destination);
         if (routeId == null) {
             throw new InvalidRequest("Route not found for given source & destination");
@@ -81,8 +79,6 @@ public class TripService {
 
         String busId = busService.getBusByNumber(busNumber).getBusId();
         int distance = routeService.getRouteById(routeId).getDistanceKm();
-
-
 
         Trip trip = BeanFactory.getInstance().createTrip();
         trip.setTripId(new IdGeneratorUtil().generateId("TRIP"));
@@ -98,25 +94,18 @@ public class TripService {
 
         trip.setPrice(price);
 
-
-
         if (!tripRepository.createTrip(trip)) {
             throw new InvalidRequest("Trip creation failed");
         }
 
-
         tripRepository.renderTripSeats(trip.getTripId(), busId);
         busService.setBusCurrentTrip(busId,trip.getTripId());
         busService.setBusStatus(busId ,BusStatus.ACTIVE);
-
         return trip;
     }
 
-
     public boolean validateBus(String busNumber ,LocalDate date , LocalTime start ,LocalTime end)throws SQLException{
-
         Bus bus = busService.getBusByNumber(busNumber);
-
 
         if (bus == null || bus.getBusStatus()!= BusStatus.FREE){
             throw new InvalidRequest(" verify the Bus Creadiantials");
@@ -125,16 +114,13 @@ public class TripService {
         List<Trip> trips = tripRepository.getBusTripsByDate(bus.getBusId(), date);
 
         for ( Trip trip : trips){
-
             if (trip.getStartTime().isBefore(start) && trip.getEndTime().isAfter(start) ||
                 trip.getStartTime().isAfter(start) && trip.getEndTime().isBefore(end)
                 ){
-                    return false;
+                return false;
             }
-
         }
         return true ;
-
     }
 
     public String  validateRoute(String source , String destination) throws SQLException{
@@ -142,43 +128,31 @@ public class TripService {
         String  routeId  = routeService.getRouteIdBySourceAndDestination(source, destination);
 
         if ( routeId == null ){
-
             throw  new InvalidRequest(" Service Not Availale for the this Route ");
-
         }
         return routeId;
-
     }
 
     public boolean cancelTrip(String tripId) throws SQLException{
-
         return tripRepository.cancelTrip(tripId);
-
     }
 
     public boolean endTrip(String tripId ) throws SQLException {
-
         return tripRepository.finishTrip(tripId);
     }
 
     public List<TripDto> getAllTrips()throws SQLException{
-
         return tripRepository.getAllTrips();
     }
 
     public List<TripDto>getAllTripsBySourceAndDestinationWithDate(String source , String destination , LocalDate date)throws  SQLException{
-
         source = source.toLowerCase().trim();
         destination = destination.toLowerCase().trim();
        return tripRepository.findAllTripsBySourceDestinationAndTime(source,destination,date);
-
     }
 
     public Trip getTripById(String tripId)throws SQLException{
-
         return tripRepository.findTripById(tripId);
-
-
     }
 
     public List<TripDto> getCurrentTrips()throws SQLException{

@@ -3,14 +3,15 @@ package com.zsgs.busbooking;
 import com.zsgs.busbooking.config.AppContext;
 import com.zsgs.busbooking.config.BeanFactory;
 import com.zsgs.busbooking.enums.BusType;
-import com.zsgs.busbooking.model.Bus;
+
 import com.zsgs.busbooking.model.Route;
 import com.zsgs.busbooking.payloads.*;
 import com.zsgs.busbooking.repositories.BusRepository;
 import com.zsgs.busbooking.repositories.PassengerRepository;
 
 import com.zsgs.busbooking.services.*;
-import com.zsgs.busbooking.util.IdGeneratorUtil;
+import com.zsgs.busbooking.util.PasswordUtil;
+
 
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -52,7 +53,7 @@ public class BusBooking {
             PassengerSignUpRequest p1 = new PassengerSignUpRequest();
             p1.setEmail("san@gmail.com");
             p1.setMobileNumber("9278111111");
-            p1.setPassword("abcd");
+            p1.setPassword(PasswordUtil.hashPassword("abcdef"));
             p1.setPassengerName("SANJAY");
 
             passengerService.addPassenger(p1);
@@ -103,27 +104,19 @@ public class BusBooking {
             BookingRequest bookingRequest = new BookingRequest("TRIP001",
                     "BUS001" ,
                     seats,
-                    "9278111111",
                     "PASG001",
                     "san@oksbi",
                     seats.size()
             );
 
             BookingServices bookingServices = AppContext.getInstance().getBookingServices();
-
             bookingServices.BookTripWithAtomicity(bookingRequest);
 
-
             List<BusDto> busdtos = busService.getAllBuses();
-
             for(BusDto busdto : busdtos){
 
                 System.out.println(busdto);
             }
-
-
-
-
 
         } catch (SQLIntegrityConstraintViolationException e) {
 

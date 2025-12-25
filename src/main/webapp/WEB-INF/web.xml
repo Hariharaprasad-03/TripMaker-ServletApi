@@ -28,6 +28,16 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>BookingController</servlet-name>
+        <servlet-class>com.zsgs.busbooking.Controllers.BookingController</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>BookingController</servlet-name>
+        <url-pattern>/api/passenger/bookingRequest</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>Login</servlet-name>
         <servlet-class>com.zsgs.busbooking.servlets.LoginServlet</servlet-class>
     </servlet>

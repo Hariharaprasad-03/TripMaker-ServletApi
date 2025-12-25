@@ -37,7 +37,6 @@ public class RouteRepository extends BaseRepository{
             pstmt.setString(1, source);
             pstmt.setString(2, destination);
 
-
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     return rs.getString("route_id");
@@ -50,13 +49,10 @@ public class RouteRepository extends BaseRepository{
     public Route findRouteById(String id ) throws SQLException{
 
         String sql = "SELECT * FROM route WHERE route_id = (?)";
-
         try(Connection connection = getConnection();
             PreparedStatement pstmt = connection.prepareStatement(sql)
         ){
-
             Route route = BeanFactory.getInstance().createRoute();
-
             pstmt.setString(1,id);
 
             try( ResultSet rs = pstmt.executeQuery()){
@@ -71,8 +67,6 @@ public class RouteRepository extends BaseRepository{
 
                 return route;
             }
-
-
         }
 
     }

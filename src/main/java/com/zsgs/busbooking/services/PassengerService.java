@@ -18,7 +18,6 @@ public class PassengerService {
     private static long id = 20 ;
 
     public PassengerService(PassengerRepository passengerRepository){
-
         this.passengerRepository = passengerRepository;
     }
 
@@ -36,10 +35,8 @@ public class PassengerService {
         passenger.setEmail(request.getEmail());
 
         if (passengerRepository.addPassenger(passenger)){
-
             return passenger;
         } else {
-
             throw new  RuntimeException("Failed Request");
         }
     }
@@ -50,7 +47,6 @@ public class PassengerService {
     public boolean validateEmail(String email) throws SQLException{
 
         if(  !new CrediantialsValidator().validateEmail(email)){
-
             throw new InvalidCreadiantialsExcaption(" invalid Email");
         }
         Passenger exist = passengerRepository.findPassenerByEmail(email);
@@ -72,16 +68,14 @@ public class PassengerService {
     }
 
     public Passenger getPassengerById(String id)throws  SQLException{
-
         return passengerRepository.findPassengerById(id);
     }
 
     public Passenger getPassengerByMobileNumber(String mobileNumber)throws SQLException{
-
         return passengerRepository.findPassengerByMobileNumber(mobileNumber);
     }
-    public Passenger getPassengerByEmail(String email) throws SQLException {
 
+    public Passenger getPassengerByEmail(String email) throws SQLException {
         return passengerRepository.findPassenerByEmail(email);
     }
 }

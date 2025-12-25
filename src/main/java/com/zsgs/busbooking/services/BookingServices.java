@@ -34,15 +34,15 @@ public class BookingServices {
     public synchronized  boolean BookTrip(BookingRequest request)throws SQLException {
 
         try {
-            if (request.busId().isEmpty() || request.tripId().isEmpty() || request.seats().isEmpty() || request.regusteredMobileNumber().isEmpty()) {
+            if (request.busId().isEmpty() || request.tripId().isEmpty() || request.seats().isEmpty() || request.passengerId().isEmpty()) {
                 throw new InvalidRequest(" Invalid request  insufficent data to Book the Ticket ");
             }
 
             String busId = request.busId().trim();
             String tripId = request.tripId().trim();
             List<Integer> seats = request.seats();
-//            String passengerId = request.passengerId().trim();
-            String mobileNumber = request.regusteredMobileNumber().trim();
+            String passengerId = request.passengerId().trim();
+//            String mobileNumber = request.regusteredMobileNumber().trim();
             String paymentId = request.paymentId().trim();
 
             Bus bus = busService.getBusById(busId);
@@ -57,8 +57,7 @@ public class BookingServices {
                 throw new InvalidRequest(" trip is Not Active now ");
             }
 
-            Passenger passenger = passengerService.getPassengerByMobileNumber(mobileNumber);
-
+            Passenger passenger = passengerService.getPassengerById(passengerId);
             if (passenger == null) {
 
                 throw new InvalidRequest(" no passenger Exist please Log in");
@@ -123,16 +122,14 @@ public class BookingServices {
         return true;
     }
 
-
     public boolean BookTripWithAtomicity(BookingRequest request) throws SQLException {
-        // 1. Get a single connection for the entire operation
         Connection conn = DatabaseConfig.getInstance().getConnection();
 
         try {
 
             conn.setAutoCommit(false);
 
-            if (request.busId().isEmpty() || request.tripId().isEmpty() || request.seats().isEmpty() || request.regusteredMobileNumber().isEmpty()) {
+            if (request.busId().isEmpty() || request.tripId().isEmpty() || request.seats().isEmpty() || request.passengerId().isEmpty()) {
                 throw new InvalidRequest(" Invalid request  insufficent data to Book the Ticket ");
             }
 
@@ -140,14 +137,12 @@ public class BookingServices {
             String tripId = request.tripId().trim();
             List<Integer> seats = request.seats();
             String passengerId = request.passengerId().trim();
-            String mobileNumber = request.regusteredMobileNumber().trim();
             String paymentId = request.paymentId().trim();
 
             Bus bus = busService.getBusById(busId);
             Trip trip = tripService.getTripById(tripId);
 
             if (bus == null || trip == null) {
-
                 throw new InvalidRequest("invalid request ");
             }
 
@@ -155,22 +150,15 @@ public class BookingServices {
                 throw new InvalidRequest(" trip is Not Active now ");
             }
 
-            Passenger passenger = passengerService.getPassengerByMobileNumber(mobileNumber);
-            passenger = passengerService.getPassengerById(passengerId);
+            Passenger passenger = passengerService.getPassengerById(passengerId);
 
             if (passenger == null) {
-
                 throw new InvalidRequest(" no passenger Exist please Log in");
             }
 
             if( ! checkSeatStatus(seats,tripId)){
-
                 throw  new InvalidRequest(" seat is Not Available Now ");
             }
-
-            // ... validation logic (Bus, Trip, Passenger checks) ...
-
-            // 3. Save Payment (Passing the connection)
 
             Payment payment = new Payment();
             payment.setPaymentAddress(paymentId);
@@ -181,7 +169,6 @@ public class BookingServices {
 
             PaymentServices paymentServices = new PaymentServices( new PaymentRepository());
             paymentServices.pay( conn ,payment);
-//            paymentRepository.pay(conn, payment);
 
             Booking booking = Booking.builder().
                     withBookingId(new IdGeneratorUtil().generateId("BOOKING")).
@@ -193,24 +180,21 @@ public class BookingServices {
                     withUserId(passenger.getPassengerId()).
                     build();
 
-            // 4. Save Booking (Passing the connection)
-            bookingRepository.bookTrip(conn, booking);
 
-            // 5. Book Seats (Passing the connection)
+            bookingRepository.bookTrip(conn, booking);
             bookingRepository.BookSeats(conn, busId,booking.getBookingId(), tripId, seats);
 
-            // 6. If we reached here without an exception, push all changes to DB
             conn.commit();
             System.out.println("Transaction Committed Successfully!");
             return true;
 
         } catch (Exception e) {
-            // 7. If ANYTHING fails, undo everything since setAutoCommit(false)
+
             if (conn != null) {
                 System.err.println("Error detected. Rolling back all changes...");
                 conn.rollback();
             }
-            throw e; // Re-throw to inform the caller
+            throw e;
         } finally {
             // 8. Always close the connection and reset auto-commit
             if (conn != null) {

@@ -31,11 +31,8 @@ public class LoginServlet extends HttpServlet {
         PassengerService passengerService = AppContext.getInstance().getPassengerService();
 
         try {
-
             String mobileNumber = (String) req.getParameter("mobileNumber");
             String password = (String) req.getParameter("password");
-
-
 
             Passenger passenger = passengerService.getPassengerByMobileNumber(mobileNumber);
             if (passenger == null){
@@ -56,19 +53,16 @@ public class LoginServlet extends HttpServlet {
                 responseData.put("username", passenger.getPassengerName());
                 responseData.put("role", "PASSENGER");
                 responseData.put("passengerId", passenger.getPassengerId());
-
                 responseData.put("message", "Login successful");
 
                 resp.getWriter().write(gson.toJson(responseData));
-
                 System.out.println(passenger.getPassengerId());
-
             }
             else {
-
                 resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             }
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             e.printStackTrace();
             resp.getWriter().write(gson.toJson("message : Database Error"));
         }

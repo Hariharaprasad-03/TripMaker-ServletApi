@@ -61,37 +61,27 @@ public class BusService {
     }
 
     public BusStatus getBusStatusById(String busId) throws SQLException {
-
         return busRepository.getBusStatus(busId);
     }
 
     public Bus getBusByNumber(String busNumber) throws SQLException{
-
         return busRepository.findBusByNumber(busNumber);
-
     }
 
     public boolean setBusStatus( String bus_id ,BusStatus status )throws SQLException{
-
         return busRepository.updateBusStatus(bus_id,status);
     }
 
     public void renderSeats(String busId)throws SQLException{
-
         int seatNumber = 1;
-
         for (int row = 1; row <= 9; row++) {
-
             for (int col = 1; col <= 5; col++) {
-
                 Seat seat = new Seat();
 
-                    // or auto-gen if DB handles it
                 seat.setBusId(busId);
                 seat.setSeatNumber(seatNumber++);
                 seat.setRowNumber(row);
                 seat.setColNumber(col);
-
 
                 if (col == 1 || col == 4) {
                     seat.setSeatType(SeatType.WINDOW);
@@ -100,22 +90,17 @@ public class BusService {
                 }
 
                 busRepository.saveSeats(seat);
-
-
             }
         }
 
     }
 
     public void setBusCurrentTrip(String busId , String tripId)throws SQLException{
-
         busRepository.updateBusCurrentTrip(busId, tripId);
     }
 
     public List<BusDto> getAllBuses() throws SQLException {
-
         List<Bus> buses = busRepository.getAllBuses();
-
         return buses.stream()
                 .map(bus -> {
 
@@ -128,17 +113,12 @@ public class BusService {
                     dto.setBusRegistrationId(bus.getBusRegistrationId());
                     dto.setBusStatus(bus.getBusStatus());
 
-
                     if (bus.getCurrentTripId() != null) {
-
-
                         try {
-
                             TripDto tripDto = tripRepository.getTripDetailsById(bus.getCurrentTripId());
                             dto.setTripDto(tripDto);
                         }
                         catch (SQLException e){
-
                             e.printStackTrace();
                         }
                     }

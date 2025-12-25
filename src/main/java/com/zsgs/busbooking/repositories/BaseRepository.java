@@ -12,16 +12,14 @@ public abstract class BaseRepository {
     private DatabaseConfig databaseConfig ;
 
     public BaseRepository(){
-
         databaseConfig = DatabaseConfig.getInstance();
     }
-    protected Connection getConnection() throws SQLException {
 
+    protected Connection getConnection() throws SQLException {
         return databaseConfig.getConnection();
     }
 
     protected void closeResourses(Connection connection , PreparedStatement pstmt , ResultSet rs){
-
         try{
             if(connection != null ) connection.close();
             if(pstmt != null) pstmt.close();

@@ -20,14 +20,12 @@ public class RouteService {
 
     public Route addRouteService ( Route route ) throws SQLException {
 
-
         if ( route.getSource().isEmpty() ){
-
             throw new InvalidRequest("Bad Request  souce cannot be Null");
         }
 
         if (route.getDestination().isEmpty()){
-            throw new InvalidRequest(" bad Request destionation cannot be Null");
+            throw new InvalidRequest("bad Request destionation cannot be Null");
         }
 
         if ( route.getDistanceKm()<40){
@@ -38,14 +36,11 @@ public class RouteService {
         route.setDestination(route.getDestination().toLowerCase().trim());
 
         String exist = routeRepository.findRouteIdBySourceAndDestination(route.getSource(),route.getDestination());
-
         if (exist != null) {
-
             throw  new DuplicateEntityException(" Already route is available ");
         }
 
         route.setRouteId( new IdGeneratorUtil().generateId("ROUTE"));
-
         if (routeRepository.addRoute(route)){
             return route;
         }
@@ -53,12 +48,10 @@ public class RouteService {
     }
 
     public Route getRouteById(String routeId)throws SQLException{
-
         return routeRepository.findRouteById(routeId);
-
     }
-    public String getRouteIdBySourceAndDestination( String source , String destionation) throws SQLException {
 
+    public String getRouteIdBySourceAndDestination( String source , String destionation) throws SQLException {
         return  routeRepository.findRouteIdBySourceAndDestination(source,destionation);
     }
 

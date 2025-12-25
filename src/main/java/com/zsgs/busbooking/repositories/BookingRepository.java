@@ -5,7 +5,6 @@ import com.zsgs.busbooking.enums.SeatStatus;
 import com.zsgs.busbooking.model.Booking;
 import com.zsgs.busbooking.payloads.UserBookingDto;
 
-
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -36,9 +35,7 @@ public class BookingRepository extends BaseRepository {
             pstmt.setInt(9, booking.getNoOfSeats());
 
             int row = pstmt.executeUpdate();
-
             return row > 0;
-
         }
     }
 
@@ -117,10 +114,8 @@ public class BookingRepository extends BaseRepository {
             try (ResultSet rs = pstmt.executeQuery()) {
 
                 if (!rs.next()) {
-
                     return null;
                 }
-
                 return SeatStatus.valueOf(rs.getString("status"));
             }
         }
@@ -137,7 +132,6 @@ public class BookingRepository extends BaseRepository {
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ps.setString(1, booking.getBookingId());
-
             ps.executeUpdate();
         }
 
@@ -170,13 +164,11 @@ public class BookingRepository extends BaseRepository {
             }
 
             int updated = ps.executeUpdate();
-
             if (updated != seatNumbers.size()) {
                 throw new SQLException("Some seats were not booked");
             }
             return updated == seatNumbers.size();
         }
-
 
     }
 
@@ -300,7 +292,7 @@ public class BookingRepository extends BaseRepository {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
 
-                    // Parse seat numbers
+
                     String seatStr = rs.getString("seat_numbers");
                     List<Integer> seats =
                             (seatStr == null || seatStr.isBlank())
@@ -310,29 +302,29 @@ public class BookingRepository extends BaseRepository {
                                     .toList();
 
                     UserBookingDto dto = new UserBookingDto(
-                            // Booking
-                            rs.getString("booking_id"),
-                            rs.getString("passenger_id"),
-                            rs.getString("booking_status"),
-                            rs.getInt("no_of_seats"),
-                            rs.getDouble("price"),
-                            rs.getTimestamp("created_at").toLocalDateTime(),
-                            seats,
 
-                            // Trip
-                            rs.getString("trip_id"),
-                            rs.getString("source"),
-                            rs.getString("destination"),
-                            rs.getDate("date").toLocalDate(),
-                            rs.getTime("start_time").toLocalTime(),
-                            rs.getTime("end_time").toLocalTime(),
-                            rs.getDouble("distance_km"),
+                                            rs.getString("booking_id"),
+                                            rs.getString("passenger_id"),
+                                            rs.getString("booking_status"),
+                                            rs.getInt("no_of_seats"),
+                                            rs.getDouble("price"),
+                                            rs.getTimestamp("created_at").toLocalDateTime(),
+                                            seats,
 
-                            // Bus
-                            rs.getString("bus_id"),
-                            rs.getString("bus_name"),
-                            rs.getString("bus_number")
-                    );
+
+                                            rs.getString("trip_id"),
+                                            rs.getString("source"),
+                                            rs.getString("destination"),
+                                            rs.getDate("date").toLocalDate(),
+                                            rs.getTime("start_time").toLocalTime(),
+                                            rs.getTime("end_time").toLocalTime(),
+                                            rs.getDouble("distance_km"),
+
+                                            // Bus
+                                            rs.getString("bus_id"),
+                                            rs.getString("bus_name"),
+                                            rs.getString("bus_number")
+                                    );
 
                     bookings.add(dto);
                 }

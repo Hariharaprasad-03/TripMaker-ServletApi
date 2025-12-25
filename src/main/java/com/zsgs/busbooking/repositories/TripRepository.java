@@ -47,7 +47,6 @@ public class TripRepository  extends BaseRepository{
         try(Connection connection = getConnection();
         PreparedStatement stmt = connection.prepareStatement(sql)){
 
-
             stmt.setString(1, TripStatus.FINISHED.toString());
             stmt.setString(2,tripId);
 
@@ -64,7 +63,6 @@ public class TripRepository  extends BaseRepository{
 
         try(Connection connection = getConnection();
         PreparedStatement stmt = connection.prepareStatement(sql)){
-
 
             stmt.setString(1, TripStatus.CANCELLED.toString());
             stmt.setString(2,tripId);
@@ -419,8 +417,6 @@ public class TripRepository  extends BaseRepository{
                     );
 
                     response.add(seat);
-
-
                 }
             }
             return response;

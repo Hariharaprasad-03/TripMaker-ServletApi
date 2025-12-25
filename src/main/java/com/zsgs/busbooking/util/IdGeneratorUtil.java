@@ -27,7 +27,6 @@ public class IdGeneratorUtil extends BaseRepository {
 
         try (Connection connection = getConnection();
              PreparedStatement pstmt = connection.prepareStatement(sql)){
-
             pstmt.setString(1,prefix);
 
             try(ResultSet rs = pstmt.executeQuery()){
@@ -37,7 +36,6 @@ public class IdGeneratorUtil extends BaseRepository {
                 }
                 int suffix = rs.getInt("id" );
                 updateId(prefix , suffix);
-
                 return prefix + String.format("%03d",suffix);
 
             }

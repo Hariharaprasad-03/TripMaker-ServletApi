@@ -8,7 +8,7 @@ public record BookingRequest(
         String busId,
         List<Integer> seats,
 
-        String regusteredMobileNumber,
+
         String passengerId,
         String paymentId,
         int numberOfSeats

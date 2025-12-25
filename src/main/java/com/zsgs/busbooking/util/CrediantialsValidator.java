@@ -3,7 +3,7 @@ package com.zsgs.busbooking.util;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CrediantialsValidator {
+public  class CrediantialsValidator {
 
     private static final Pattern EMAIL_REGEX_PATTERN =
            Pattern.compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");

@@ -13,7 +13,6 @@ public class JwtUtil {
     private static final SecretKey key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
     private static final long EXPIRATION_TIME = 3600000; // 1 hour
 
-    // Generate JWT Token with roles
     public static String generateToken(String mobileNumber,String role) {
         return Jwts.builder()
                 .setSubject(mobileNumber)
@@ -30,7 +29,6 @@ public class JwtUtil {
     }
 
 
-    // Validate and parse JWT Token
     public static Claims validateToken(String token) {
         try {
             return Jwts.parser()
@@ -49,20 +47,17 @@ public class JwtUtil {
         return claims.getSubject();
     }
 
-    // Extract roles from token
     @SuppressWarnings("unchecked")
     public static List<String> getRolesFromToken(String token) {
         Claims claims = validateToken(token);
         return (List<String>) claims.get("roles");
     }
 
-    // Check if token has specific role
     public static boolean hasRole(String token, String role) {
         List<String> roles = getRolesFromToken(token);
         return roles != null && roles.contains(role);
     }
 
-    // Check if token has any of the specified roles
     public static boolean hasAnyRole(String token, String... requiredRoles) {
         List<String> userRoles = getRolesFromToken(token);
         if (userRoles == null) return false;
@@ -75,7 +70,6 @@ public class JwtUtil {
         return false;
     }
 
-    // Check if token is expired
     public static boolean isTokenExpired(String token) {
         try {
             Claims claims = validateToken(token);

@@ -30,12 +30,9 @@ public class BusRepository extends BaseRepository{
             pstmt.setString(3,bus.getBusNumber());
             pstmt.setString(6,bus.getBusStatus().toString());
 
-
-
             pstmt.setString(7,bus.getCurrentTripId());
 
-             int row = pstmt.executeUpdate();
-
+            int row = pstmt.executeUpdate();
             return row > 0 ;
         }
     }
@@ -44,15 +41,12 @@ public class BusRepository extends BaseRepository{
 
         String sql = "SELECT * FROM bus WHERE bus_id = (?)" ;
 
-
         Connection connection = getConnection();
         PreparedStatement pstmt = getConnection().prepareStatement(sql);
         try{
 
             pstmt.setString(1,id);
-
             ResultSet rs = pstmt.executeQuery();
-
             if (! rs.next()){
                 return null;
             }
@@ -65,7 +59,6 @@ public class BusRepository extends BaseRepository{
             bus.setBusNumber(rs.getString("bus_number"));
             bus.setBusStatus(BusStatus.valueOf(rs.getString("status")));
 
-
             return bus ;
         }finally {
             closeResourses(connection,pstmt);
@@ -75,10 +68,8 @@ public class BusRepository extends BaseRepository{
     public Bus findBusByNumber(String busNumber) throws SQLException {
 
         String sql = "SELECT * FROM bus WHERE bus_number = ?";
-
         try (Connection connection = getConnection();
              PreparedStatement pstmt = connection.prepareStatement(sql)) {
-
             pstmt.setString(1, busNumber);
 
             try (ResultSet rs = pstmt.executeQuery()) {
@@ -107,7 +98,6 @@ public class BusRepository extends BaseRepository{
     public boolean removeBusbyId(String id ) throws SQLException{
 
         String sql = "UPDATE bus SET status = (?) WHERE bus_id = (?)";
-
         try(Connection connection = getConnection();
         PreparedStatement pstmt = connection.prepareStatement(sql)){
 

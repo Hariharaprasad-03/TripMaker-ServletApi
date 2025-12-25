@@ -38,8 +38,6 @@ public class SignupServlet extends HttpServlet {
 
         try {
 
-
-
             PassengerSignUpRequest signUpRequest = gson.fromJson(req.getReader(),PassengerSignUpRequest.class);
 
             if (signUpRequest.getPassengerName() == null || signUpRequest.getEmail() == null || signUpRequest.getMobileNumber() == null

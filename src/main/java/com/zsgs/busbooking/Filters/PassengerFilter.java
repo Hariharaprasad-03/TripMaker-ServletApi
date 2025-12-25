@@ -11,11 +11,18 @@ import java.util.List;
 public class PassengerFilter implements Filter {
 
 
+
+
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
 
+        response.setContentType("application/json");
+
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
+
+
+
 
         httpResponse.setContentType("application/json");
 
@@ -23,6 +30,8 @@ public class PassengerFilter implements Filter {
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
+
+
 
             try {
                 if (JwtUtil.isTokenExpired(token)) {
@@ -41,11 +50,13 @@ public class PassengerFilter implements Filter {
                     httpResponse.getWriter().write(
                             "{\"error\": \"Access denied. Passenger access only.\", \"code\": \"WRONG_USER_TYPE\"}"
                     );
+                    System.out.println(" validaion failed");
                     return;
                 }
 
                 // Set user info in request
                 String userMobileNumber = JwtUtil.getMobileNumerFromToken(token);
+
                 List<String> roles = JwtUtil.getRolesFromToken(token);
 
                 httpRequest.setAttribute("username", userMobileNumber);
