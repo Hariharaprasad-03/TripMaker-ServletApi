@@ -25,17 +25,23 @@ public class PassengerBookingServlet extends HttpServlet {
 
         try {
 
-            String id  = req.getParameter("passengerID").trim();
-            List<UserBookingDto> bookings = bookingServices.getPassengerBookings(id);
+            String passengerId  = req.getParameter("passengerId");
+            System.out.println(passengerId);
+            List<UserBookingDto> bookings = bookingServices.getPassengerBookings(passengerId);
 
             resp.setStatus(HttpServletResponse.SC_OK);
             resp.getWriter().write(gson.toJson(bookings));
 
-            } catch (SQLException e) {
+            }
+        catch (SQLException e) {
             e.printStackTrace();
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             resp.getWriter().write("Error : Database Error ");
 
+        }catch (Exception e) {
+
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            resp.getWriter().write("Error");
         }
 
 

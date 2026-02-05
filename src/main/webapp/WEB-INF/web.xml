@@ -65,6 +65,25 @@
         <servlet-name>TripSeatData</servlet-name>
         <url-pattern>/seats</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>PassengerTickets</servlet-name>
+        <servlet-class>com.zsgs.busbooking.servlets.PassengerBookingServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>PassengerTickets</servlet-name>
+        <url-pattern>/api/passenger/getbookings</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>PassengerController</servlet-name>
+        <servlet-class>com.zsgs.busbooking.Controllers.PassengerController</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>PassengerController</servlet-name>
+        <url-pattern>/api/passenger/getdetails</url-pattern>
+    </servlet-mapping>
 
 
     <filter>

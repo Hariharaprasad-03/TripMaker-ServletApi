@@ -2,6 +2,7 @@ package com.zsgs.busbooking.repositories;
 
 import com.zsgs.busbooking.config.BeanFactory;
 import com.zsgs.busbooking.model.Passenger;
+import com.zsgs.busbooking.payloads.PassengerDto;
 
 import java.sql.*;
 
@@ -147,6 +148,30 @@ public class PassengerRepository extends BaseRepository{
                 passenger.setPassword(rs.getString("password"));
 
                 return passenger;
+            }
+        }
+    }
+
+    public PassengerDto getPassengerDtoById(String id )throws  SQLException{
+
+        String sql = "SELECT * FROM passenger WHERE passenger_id = ?";
+
+        try( Connection connection = getConnection();
+        PreparedStatement psmt = connection.prepareStatement(sql)) {
+
+            psmt.setString(1,id);
+
+            try( ResultSet rs = psmt.executeQuery()){
+
+                if (! rs.next()){
+                    return null ;
+                }
+                return new PassengerDto(
+                        rs.getString("passenger_name"),
+                        rs.getString("passenger_id"),
+                        rs.getString("email"),
+                        rs.getString("mobile_number")
+                );
             }
         }
     }

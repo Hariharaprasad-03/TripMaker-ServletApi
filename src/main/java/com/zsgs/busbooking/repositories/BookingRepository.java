@@ -4,6 +4,7 @@ import com.zsgs.busbooking.enums.BookinsStatus;
 import com.zsgs.busbooking.enums.SeatStatus;
 import com.zsgs.busbooking.model.Booking;
 import com.zsgs.busbooking.payloads.UserBookingDto;
+import com.zsgs.busbooking.util.GsonUtil;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -276,7 +277,7 @@ public class BookingRepository extends BaseRepository {
         FROM booking b
         JOIN trip_cte t ON b.trip_id = t.trip_id
         JOIN bus bu ON b.bus_id = bu.bus_id
-        LEFT JOIN booking_seat bs ON b.booking_id = bs.booking_id
+        LEFT JOIN trip_seat bs ON b.booking_id = bs.booking_id
         WHERE b.passenger_id = ?
         GROUP BY b.booking_id
         ORDER BY b.created_at DESC
@@ -288,7 +289,7 @@ public class BookingRepository extends BaseRepository {
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, passengerId);
-
+            System.out.println(" in  booking repo");
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
 
@@ -308,7 +309,7 @@ public class BookingRepository extends BaseRepository {
                                             rs.getString("booking_status"),
                                             rs.getInt("no_of_seats"),
                                             rs.getDouble("price"),
-                                            rs.getTimestamp("created_at").toLocalDateTime(),
+//                                            rs.getTimestamp("created_at").toLocalDateTime(),
                                             seats,
 
 
@@ -327,11 +328,13 @@ public class BookingRepository extends BaseRepository {
                                     );
 
                     bookings.add(dto);
+                    System.out.println(dto);
                 }
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException("Failed to fetch user bookings", e);
+            e.printStackTrace();
+            System.out.println(" Here is the probllem : book repo");
         }
 
         return bookings;

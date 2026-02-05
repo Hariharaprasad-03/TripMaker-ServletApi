@@ -33,7 +33,7 @@ public class TripRepository  extends BaseRepository{
             pstmt.setTime(5,Time.valueOf(trip.getEndTime()));
             pstmt.setString(6, trip.getStaus().toString());
             pstmt.setDate(7, Date.valueOf(trip.getTripDate()));
-            pstmt.setDouble(8,trip.getPrice());
+            pstmt.setDouble(8,trip.getPrice());  // start date  end date needed
 
             int row = pstmt.executeUpdate();
             return row > 0 ;
@@ -97,7 +97,7 @@ public class TripRepository  extends BaseRepository{
                     trip.setEndTime(rs.getTime("end_time").toLocalTime());
                     trip.setTripDate(rs.getDate("date").toLocalDate());
 
-                    trips.add(trip);
+                    trips.add(trip);  // start date end date need to Added
                 }
 
             }
@@ -168,7 +168,7 @@ public class TripRepository  extends BaseRepository{
 
                     );
 
-                    tripDetails.add(dto);
+                    tripDetails.add(dto); // start date end date need to  add ?
                 }
             }
             return tripDetails;
@@ -215,7 +215,7 @@ public class TripRepository  extends BaseRepository{
 
                     );
 
-                    tripDetails.add(dto);
+                    tripDetails.add(dto); // start date And End date need to add
                 }
             }
             return tripDetails;
@@ -241,7 +241,7 @@ public class TripRepository  extends BaseRepository{
                     return null ;
                 }
 
-                Trip trip = BeanFactory.getInstance().createTrip();
+                Trip trip = BeanFactory.getInstance().createTrip(); // start date End date need to add
 
                 trip.setTripId(rs.getString("trip_id"));
                 trip.setBusId(rs.getString("bus_id"));

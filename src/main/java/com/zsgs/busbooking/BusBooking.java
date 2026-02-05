@@ -19,13 +19,19 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+// change 1  - > trip start date And End date **
+// change 3  - > Add Login Filter
+// Add  - > dashBoard Servlet
+//
 
+// Trip Making Stratergy for future with points **
+// Implement Admin Side Servlets  **
+// change 2  - > Admin Authorization
 public class BusBooking {
 
     public static  void main(String[] args){
 
         try {
-
 
             PassengerService passengerService = new PassengerService( new PassengerRepository());
             BusService busService = new BusService(new BusRepository());
@@ -47,8 +53,24 @@ public class BusBooking {
             busRequest2.setBusRegistrationId("12345679");
             busRequest2.setBusType(String.valueOf(BusType.NORMAL));
 
+            AddBusRequest busRequest3 = new AddBusRequest();
+
+            busRequest3.setBusNumber("TN23BR4845");
+            busRequest3.setBusName("SANJAY TRAVELS");
+            busRequest3.setBusRegistrationId("12345670");
+            busRequest3.setBusType(String.valueOf(BusType.NORMAL));
+
+            AddBusRequest busRequest4 = new AddBusRequest();
+
+            busRequest4.setBusNumber("TN23BR4846");
+            busRequest4.setBusName("SANDEEP TRAVELS");
+            busRequest4.setBusRegistrationId("12345670");
+            busRequest4.setBusType(String.valueOf(BusType.NORMAL));
+
             busService.addBus(busRequest); //"BUS001"
             busService.addBus(busRequest2); // BUS002
+            busService.addBus(busRequest3) ; // BUS003
+            busService.addBus(busRequest4); // bus004
 
             PassengerSignUpRequest p1 = new PassengerSignUpRequest();
             p1.setEmail("san@gmail.com");
@@ -71,10 +93,24 @@ public class BusBooking {
             velloreToThiruppathur.setDestination("thiruppathur");
             velloreToThiruppathur.setDistanceKm(85);
 
+
+            Route velloreToSalem = BeanFactory.getInstance().createRoute();
+            velloreToSalem.setSource("vellore");
+            velloreToSalem.setDestination("salem");
+            velloreToSalem.setDistanceKm(288);
+
+            Route velloreToVarkala = BeanFactory.getInstance().createRoute();
+            velloreToVarkala.setSource("vellore");
+            velloreToVarkala.setDestination("varkala");
+            velloreToVarkala.setDistanceKm(658);
+
             routeService.addRouteService(velloreToThiruppathur);
             // ROUTE001
             routeService.addRouteService(route);
             // ROUTE002
+            routeService.addRouteService(velloreToSalem); // ROUTE003
+
+            routeService.addRouteService(velloreToVarkala) ; // ROUTE004
 
 
             CreateTripRequest tripRequest1 = new CreateTripRequest("TN23BR4843", "SKMR", "vellore", "arni", LocalTime.now(), LocalTime.of(18,00), LocalDate.now());
@@ -82,10 +118,17 @@ public class BusBooking {
             CreateTripRequest tripRequest2 = new CreateTripRequest("TN23BR4844", "SKMS", "vellore", "thiruppathur", LocalTime.now(), LocalTime.of(19,00), LocalDate.now());
             // TRIP002
 
+            CreateTripRequest tripRequest3 = new CreateTripRequest("TN23BR4845","SANJAY TRAVELS","vellore" , "salem",LocalTime.of(18,00),LocalTime.of(23,30),LocalDate.now());
+//            Trip003
+            CreateTripRequest tripRequest4 = new CreateTripRequest("TN23BR4846","SANJAY TRAVELS","vellore", "varkala",LocalTime.of(19,00),LocalTime.of(7,30),LocalDate.now());
+            // TRIP004
+
             TripService tripService = AppContext.getInstance().getTripService();
 
             tripService.createTrip(tripRequest1);
             tripService.createTrip(tripRequest2);
+            tripService.createTrip(tripRequest3);
+//            tripService.createTrip(tripRequest4);
 
             List<TripDto> dto = tripService.getCurrentTrips();
 

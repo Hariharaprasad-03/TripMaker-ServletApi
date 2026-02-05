@@ -18,7 +18,7 @@ public record TripDto(
         LocalDate date ,
         BusType busType,
         double price
-) implements Serializable {
+) implements Serializable { // start date end date ?
 
     @Override
     public String toString() {

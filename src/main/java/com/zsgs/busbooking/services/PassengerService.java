@@ -4,10 +4,10 @@ import com.zsgs.busbooking.config.BeanFactory;
 import com.zsgs.busbooking.exception.DuplicateEntityException;
 import com.zsgs.busbooking.exception.InvalidCreadiantialsExcaption;
 import com.zsgs.busbooking.model.Passenger;
+import com.zsgs.busbooking.payloads.PassengerDto;
 import com.zsgs.busbooking.payloads.PassengerSignUpRequest;
 import com.zsgs.busbooking.repositories.PassengerRepository;
 import com.zsgs.busbooking.util.CrediantialsValidator;
-import com.zsgs.busbooking.util.IdGenerator;
 import com.zsgs.busbooking.util.IdGeneratorUtil;
 
 import java.sql.SQLException;
@@ -77,5 +77,10 @@ public class PassengerService {
 
     public Passenger getPassengerByEmail(String email) throws SQLException {
         return passengerRepository.findPassenerByEmail(email);
+    }
+
+    public PassengerDto getPassengerDtoById(String passengerId) throws SQLException {
+
+        return passengerRepository.getPassengerDtoById(passengerId);
     }
 }

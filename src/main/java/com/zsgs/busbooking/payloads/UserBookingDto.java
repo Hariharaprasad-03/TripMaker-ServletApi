@@ -13,7 +13,7 @@ public record UserBookingDto(
         String bookingStatus,
         int noOfSeats,
         double price,
-        LocalDateTime createdAt,
+//        LocalDateTime createdAt,
         List<Integer> seatNumbers,
 
         //Needed trip details
