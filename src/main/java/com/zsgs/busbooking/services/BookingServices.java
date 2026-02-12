@@ -113,9 +113,7 @@ public class BookingServices {
     public  boolean  checkSeatStatus (List<Integer> seats , String tripId)throws SQLException{
 
         for ( int seatNumber : seats){
-
             if (bookingRepository.chcekSeatStatus(tripId,seatNumber) != SeatStatus.AVAILABLE){
-
                 return false;
             }
         }

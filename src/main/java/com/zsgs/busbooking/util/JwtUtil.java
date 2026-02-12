@@ -13,6 +13,7 @@ public class JwtUtil {
     private static final SecretKey key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
     private static final long EXPIRATION_TIME = 3600000; // 1 hour
 
+    // jwt Generation
     public static String generateToken(String mobileNumber,String role) {
         return Jwts.builder()
                 .setSubject(mobileNumber)
@@ -53,6 +54,7 @@ public class JwtUtil {
         return (List<String>) claims.get("roles");
     }
 
+    // Role Checking in Jwt
     public static boolean hasRole(String token, String role) {
         List<String> roles = getRolesFromToken(token);
         return roles != null && roles.contains(role);

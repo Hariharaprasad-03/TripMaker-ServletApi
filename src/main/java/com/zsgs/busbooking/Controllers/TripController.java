@@ -32,7 +32,7 @@ public class TripController extends HttpServlet {
 
 
     }
-
+    // trip updation
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
@@ -78,7 +78,7 @@ public class TripController extends HttpServlet {
     }
 
 
-
+    // get api end for currently active trips
     private void getCurrentTrips(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
             List<TripDto> trips = tripService.getCurrentTrips();
@@ -99,6 +99,7 @@ public class TripController extends HttpServlet {
         }
     }
 
+    // updating Trip Details
     public void updateTrip(HttpServletRequest req , HttpServletResponse resp)throws IOException {
 
         try{
@@ -126,7 +127,7 @@ public class TripController extends HttpServlet {
 
         }
     }
-
+    // updating trip Status
     public void updateStatus(HttpServletRequest req ,HttpServletResponse resp)throws IOException {
 
         try {

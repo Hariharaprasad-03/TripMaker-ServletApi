@@ -30,6 +30,7 @@ public class SignupServlet extends HttpServlet {
         System.out.println("tomcat found me ");
     }
 
+    // Sign up Process for Passenger
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
